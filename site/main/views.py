@@ -1,46 +1,54 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.template import loader
 
 from .forms import RegisterForm, SignInForm
 
 def index(request):
-    template = loader.get_template('main/index.html')
-    return HttpResponse(template.render(request))
+    return render(request, 'main/index.html')
 
 def about(request):
-    template = loader.get_template('main/about.html')
-    return HttpResponse(template.render(request))
+    title = 'About'
+    return render(request, 'main/about.html', {'title': title})
+
+def profile(request):
+    title = 'Profile'
+    return render(request, 'main/profile.html', {'title': title})
 
 def signin(request):
+    title = 'Sign In'
+
     # We need to process the registration form data
     form = SignInForm(request.POST)
-
+    
     # Check if valid
     if form.is_valid():
-        # Process the data
+        # Process and save the data
+
         # Eventually redirect to user profile
-        return HttpResponseRedirect('Successful Login.')
+        # Still need to manage users before being able to handle custom profiles
+        return HttpResponseRedirect('/profile')
 
     else:
         form = SignInForm()
 
-    return render(request, 'main/signin.html', {'form': form})
+    return render(request, 'main/signin.html', {'form': form, 'title': title})
 
 
 def register(request):
+    title = 'Register'
+
     # We need to process the registration form data
     form = RegisterForm(request.POST)
 
     # Check if valid
     if form.is_valid():
         # Process the data
-        return HttpResponseRedirect('Registration Successful.')
+        return HttpResponseRedirect('Success')
 
     else:
         form = RegisterForm()
 
-    return render(request, 'main/register.html', {'form': form})
+    return render(request, 'main/register.html', {'form': form, 'title': title})
 
 
 
