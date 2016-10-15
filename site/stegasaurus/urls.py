@@ -1,5 +1,12 @@
-"""stegasaurus URL Configuration
+"""
+ This file was created on October 15th, 2016
+ by Deborah Venuti and James Riley
 
+ Last updated on: October 15th, 2016
+ Updated by: James Riley
+"""
+
+"""stegasaurus URL Configuration
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.10/topics/http/urls/
 Examples:
