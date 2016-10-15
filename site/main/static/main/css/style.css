@@ -54,11 +54,11 @@ a:hover, a:focus {
     margin-top: 10px;
 }
 
-.sign-in .button {
+.aform .button {
     background-color: #004d00;
 }
 
-.sign-in .button:hover {
+.aform .button:hover {
     background-color: #006600;
 }
 
