@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+<!-- begin body content block -->
+{% block content %}
+    <div class="container">
+        <div class="row row-centered">    
+            <div class="col-md-3 col-centered"></div>
+            <div class="col-md-6 col-centered" align="center">
+                <div class="sign-in">
+                    <form class="form-container">
+                        <div class="form-subtitle">Full Name</div>
+                            <input class="form-field" type="text" name="username" /><br />
+                        <div class="form-subtitle">Email</div>
+                            <input class="form-field" type="text" name="username" /><br />
+                        <div class="form-subtitle">Username</div>
+                            <input class="form-field" type="text" name="username" /><br />
+                        <div class="form-subtitle">Password</div>
+                            <input class="form-field" type="password" name="password" /><br />
+                        <div class="submit-container">
+                            <input class="button" type="submit" value="Register" />
+                        </div>
+                    </form>
+                </div>
+                <a href="/signin/"> Existing user? Click here to sign in. </a> 
+            </div>
+            <div class="col-md-3 col-centered"></div>
+        </div>
+    </div>
+{% endblock %}
+<!-- end body content block -->
