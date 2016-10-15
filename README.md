@@ -1,1 +1,5 @@
-# stegasaurus
+## Stegasaurus ##
+
+***
+
+About
