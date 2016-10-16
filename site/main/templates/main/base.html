@@ -15,9 +15,7 @@
         {% endif %}
         <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap.min.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap.css' %}" /> 
-        <!--
-        <link rel="stylesheet" type="text/css" href="{% static 'main/css/style.css' %}" />
-        -->
+        <link rel="stylesheet" type="text/css" href="{% static 'main/css/custom.css' %}" />
     </head>
     <body>
         <nav class="navbar navbar-default">
@@ -51,5 +49,9 @@
                 {% endblock %}
             <!-- end body content block -->
         </div>
+    <!-- begin script  block -->
+        {% block javascript %}
+        {% endblock %}
+    <!-- end script block -->
     </body>
 </html>
