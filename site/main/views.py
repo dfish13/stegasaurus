@@ -8,6 +8,7 @@
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 
@@ -43,16 +44,21 @@ def signin(request):
 def register(request):
     title = 'Register'
 
-    form = RegisterForm(request.POST)
+    if (request.method == 'POST'):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            formData = form.cleaned_data
 
-    if form.is_valid():
-        return HttpResponseRedirect('Success')
+            try:
+                user = User.objects.get(username=formData['email'])
+            
+            except User.DoesNotExist:
+                user = User.objects.create_user(formData['email'], formData['email'], formData['password'], first_name=formData['first_name'], last_name=formData['last_name'])
+                user.save()
+
+            return HttpResponseRedirect('/signin')
 
     else:
         form = RegisterForm()
 
     return render(request, 'main/register.html', {'form': form, 'title':title})
-
-
-
-
