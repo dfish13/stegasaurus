@@ -3,7 +3,7 @@
  by Deborah Venuti, Bethany Sanders and James Riley
 
  Last updated on: October 16th, 2016
- Updated by: Deborah Venuti
+ Updated by: Gene Ryasnianskiy
 """
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -23,19 +23,34 @@ def about(request):
 
 def profile(request):
     title = 'Profile'
-    return render(request, 'main/profile.html', {'title': title})
+
+    if request.user.is_authenticated:
+        return render(request, 'main/profile.html', {'title': title})
+    else:
+        return HttpResponseRedirect('/signin')
 
 def signin(request):
     title = 'Sign In'
 
-    # We need to process the registration form data
-    form = SignInForm(request.POST)
-    
-    # Check if valid
-    if form.is_valid():
-        
-        return HttpResponseRedirect('/profile')
+    if (request.method == 'POST'):
+        form = SignInForm(request.POST)
+        if form.is_valid():
+            formData = form.cleaned_data
+        #else: invalid form, output something like a message
+         
+        userName = formData['email']
+        userPassword = formData['password']
 
+        user = authenticate(username=userName, password=userPassword)
+        
+        if user is not None:
+            login(request,user)
+            return HttpResponseRedirect('/profile')
+        else:
+            logout(request)
+        
+        return HttpResponseRedirect('/register')    
+    
     else:
         form = SignInForm()
 

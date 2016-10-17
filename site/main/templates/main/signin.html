@@ -1,7 +1,6 @@
 <!--
  This file was created on October 15th, 2016
  by Deborah Venuti and Bethany Sanders
-
  Last updated on: October 15th, 2016
  Updated by: Deborah Venuti
 -->
@@ -14,14 +13,14 @@
         <div class="row row-centered">    
             <div class="col-md-3 col-centered"></div>
             <div class="col-md-6 col-centered" align="center">
-                <div class="aform">
-                    <form role='form' action='' method='post'>
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input class="btn btn-default" type="submit" value="Sign In" />
-                    </form>
-                </div>
-                <a href="/register/" class="btn btn-link"> New user? Click here to register. </a> 
+                <form role='form' action='' method='post'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="submit-container">
+                        <input class="btn btn-primary" type="submit" value="Sign In" />
+                    </div>
+                </form>
+                <a href="/register/"> New user? Click here to register. </a> 
             </div>
             <div class="col-md-3 col-centered"></div>
         </div>
