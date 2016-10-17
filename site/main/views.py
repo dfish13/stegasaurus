@@ -47,8 +47,8 @@ def signin(request):
             login(request,user)
             return HttpResponseRedirect('/profile')
         else:
-            logout(request)
-        
+            return HttpResponseRedirect('/signin')            
+ 
         return HttpResponseRedirect('/register')    
     
     else:
