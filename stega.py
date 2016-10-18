@@ -130,17 +130,17 @@ if __name__ == "__main__" :
         carrier_path = input('image path: ')
         text = input('input a string: ')
         inject_text(carrier_path, text, 'output.png')
-        img = Image.open('output.png')
+        img = Image.open('pings/output.png')
     elif choice == 2 :
         carrier_path = input('carrier image path: ') 
         hidden_path = input('hidden image path: ')
         inject_png(carrier_path, hidden_path, 'output.png')
-        img = Image.open('output.png')
+        img = Image.open('pings/output.png')
     elif choice == 3 :
         path = input('image path: ')
         text = extract_text(path)
         print(text)
-        img = Image.open('output.png')
+        img = Image.open('pings/output.png')
         
     elif choice == 4 :
         path = input('image path: ')
