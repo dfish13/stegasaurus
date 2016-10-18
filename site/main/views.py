@@ -36,20 +36,20 @@ def signin(request):
         form = SignInForm(request.POST)
         if form.is_valid():
             formData = form.cleaned_data
-        #else: invalid form, output something like a message
-         
-        userName = formData['email']
-        userPassword = formData['password']
+            
+            userName = formData['email']
+            userPassword = formData['password']
 
-        user = authenticate(username=userName, password=userPassword)
-        
-        if user is not None:
-            login(request,user)
-            return HttpResponseRedirect('/profile')
-        else:
-            return HttpResponseRedirect('/signin')            
- 
-        return HttpResponseRedirect('/register')    
+            user = authenticate(username=userName, password=userPassword)
+            if user is not None:
+                login(request,user)
+                return HttpResponseRedirect('/profile')
+            else:
+                return HttpResponseRedirect('/signin')            
+
+            return HttpResponseRedirect('/register')  
+        #else: invalid form, output something like a message
+          
     
     else:
         form = SignInForm()
