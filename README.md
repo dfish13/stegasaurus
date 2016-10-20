@@ -1,8 +1,5 @@
 # Stegasaurus #
 
-About
-
-TODO: what image formats we support, what the limitations are, how to set up the project, how to run the steg code etc.
 
 Currently, the python module stega.py has functions that support unicode text injection and extraction to and from PNG image files.
 Additionally, this module supports injection and extraction of certain types of PNG images to and from larger PNG files. PNG image types that are supported are Grayscale, RGB (3 channel), and RGBA (4 channel).
@@ -17,4 +14,6 @@ $ python3 stega.py
 and hit enter.
 You will be presented with a few options and prompted to choose one of the test functions.
 
+***
 
+To access the site, go to http://resnus.duckdns.org.
