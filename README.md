@@ -42,3 +42,4 @@ You will be presented with a few options and prompted to choose one of the test 
 
 ***
 
+To access the site: http://resnus.duckdns.org
