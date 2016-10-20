@@ -1,10 +1,6 @@
 # Stegasaurus #
 
-<<<<<<< HEAD
-=======
 **TODO** : About section, how to set up the project, plans for the future, etc.
-
->>>>>>> 764c870f944ade663dada79ef89155013894366c
 
 ### About
 
