@@ -55,4 +55,8 @@
     left: 10px;
     top: 11px;
     left: -6px;
-}  
+}
+
+.profile-buttons {
+    background-color: gray;
+}
