@@ -13,6 +13,9 @@
         <div class="row row-centered">    
             <div class="col-md-3 col-centered"></div>
             <div class="col-md-6 col-centered" align="center">
+                {% if invalid %}
+                    <p>Your email/password combo does not exist. Try again or register.</p>
+                {% endif %}
                 <form role='form' action='' method='post'>
                     {% csrf_token %}
                     {{ form.as_p }}
