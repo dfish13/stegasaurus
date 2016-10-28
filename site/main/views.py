@@ -8,9 +8,9 @@
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, render_to_response
-from django.template import RequestContext
 
 from .forms import RegisterForm, SignInForm
 
@@ -21,13 +21,10 @@ def about(request):
     title = 'About'
     return render(request, 'main/about.html', {'title': title})
 
+@login_required()
 def profile(request):
     title = 'Profile'
-
-    if request.user.is_authenticated:
-        return render(request, 'main/profile.html', {'title': title})
-    else:
-        return HttpResponseRedirect('/signin')
+    return render(request, 'main/profile.html', {'title': title})
 
 def signin(request):
     title = 'Sign In'
@@ -36,24 +33,19 @@ def signin(request):
         form = SignInForm(request.POST)
         if form.is_valid():
             formData = form.cleaned_data
-            
             userName = formData['email']
             userPassword = formData['password']
 
             user = authenticate(username=userName, password=userPassword)
-            if user is not None:
+            print(user)
+            if (user is not None):
                 login(request,user)
                 return HttpResponseRedirect('/profile')
             else:
-                return HttpResponseRedirect('/signin')            
+                return render(request, 'main/signin.html', {'form':form, 'invalid': True})
 
-            return HttpResponseRedirect('/register')  
-        #else: invalid form, output something like a message
-          
-    
     else:
         form = SignInForm()
-
     return render(request, 'main/signin.html', {'form': form, 'title': title})
 
 def register(request):
