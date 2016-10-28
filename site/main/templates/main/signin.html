@@ -9,25 +9,38 @@
 
 <!-- begin body content block -->
 {% block content %}
-    <div class="container">
-        <div class="row row-centered">    
-            <div class="col-md-3 col-centered"></div>
-            <div class="col-md-6 col-centered" align="center">
-                {% if invalid %}
-                    <p>Your email/password combo does not exist. Try again or register.</p>
-                {% endif %}
-                <form role='form' action='' method='post'>
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="submit-container">
-                        <input class="btn btn-primary" type="submit" value="Sign In" />
+<div class="container">   
+    <div class="col-md-3 col-centered"></div>
+        <div class="col-md-6 col-centered">
+            {% if invalid %}
+                <p class="error-msg">Incorrect email and/or password. Try again or register as a new user.</p>
+            {% endif %}
+            <form class="form-horizontal" role='form' action='/signin' method='POST'>{% csrf_token %}
+                 <fieldset>
+                    <div class="form-group">
+                      <label for="email" class="col-lg-2 control-label">{{ form.email.label }}</label>
+                      <div class="col-lg-10">
+                        <input id="email" type="text" name="email" maxlength="150" required class="form-control"/>
+                      </div>
                     </div>
-                </form>
-                <a href="/register/"> New user? Click here to register. </a> 
-            </div>
-            <div class="col-md-3 col-centered"></div>
+                    <div class="form-group">
+                      <label for="password" class="col-lg-2 control-label">{{ form.password.label }}</label>
+                      <div class="col-lg-10">
+                        <input id="password" type="password" name="password" maxlength="32" required class="form-control"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                      </div>
+                    </div>
+                  </fieldset>
+            </form>
+            <a href="/register/"> New user? Click here to register. </a> 
         </div>
+        <div class="col-md-3 col-centered"></div>
     </div>
+</div>
 {% endblock %}
 <!-- end body content block -->
 

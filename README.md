@@ -1,7 +1,5 @@
 # Stegasaurus #
 
-**TODO** : About section, how to set up the project, plans for the future, etc.
-
 ### About
 
 
