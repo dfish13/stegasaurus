@@ -2,17 +2,18 @@
  This file was created on October 15th, 2016
  by Deborah Venuti and Bethany Sanders
 
- Last updated on: October 15th, 2016
+ Last updated on: October 28th, 2016
  Updated by: Deborah Venuti
 -->
 {% extends 'main/base.html' %}
 {% load static %}
 
+<!-- form built out by Deborah Venuti -->
 <!-- begin body content block -->
 {% block content %}
 <div class="container">   
     <div class="col-md-3 col-centered"></div>
-        <div class="col-md-6 col-centered">
+        <div class="col-md-6 col-centered well">
             <form class="form-horizontal" role='form' action='/register' method='POST'>{% csrf_token %}
                  <fieldset>
                     <div class="form-group">

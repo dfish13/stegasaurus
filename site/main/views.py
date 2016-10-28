@@ -27,6 +27,12 @@ def profile(request):
     title = 'Profile'
     return render(request, 'main/profile.html', {'title': title})
 
+# Deborah Venuti added this
+@login_required(login_url='main/signin.html')
+def encrypt(request):
+    title = 'Encrypt'
+    return render(request, 'main/encrypt.html', {'title': title})
+
 # Deborah Venuti added return of invalid indicator for sign in attempt of non-existing account
 def signin(request):
     title = 'Sign In'
