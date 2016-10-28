@@ -22,7 +22,7 @@ def about(request):
     return render(request, 'main/about.html', {'title': title})
 
 # Deborah Venuti added login_required decorator
-@login_required('main/signin.html')
+@login_required(login_url='main/signin.html')
 def profile(request):
     title = 'Profile'
     return render(request, 'main/profile.html', {'title': title})
