@@ -2,8 +2,8 @@
  This file was created on October 15th, 2016
  by Deborah Venuti, Bethany Sanders and James Riley
 
- Last updated on: October 16th, 2016
- Updated by: Gene Ryasnianskiy
+ Last updated on: October 28th, 2016
+ Updated by: Deborah Venuti
 """
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,11 +21,13 @@ def about(request):
     title = 'About'
     return render(request, 'main/about.html', {'title': title})
 
-@login_required()
+# Deborah Venuti added login_required decorator
+@login_required('main/signin.html')
 def profile(request):
     title = 'Profile'
     return render(request, 'main/profile.html', {'title': title})
 
+# Deborah Venuti added return of invalid indicator for sign in attempt of non-existing account
 def signin(request):
     title = 'Sign In'
 
