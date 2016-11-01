@@ -8,6 +8,9 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
+
+Last updated on: October 31th, 2016
+Updated by: Gene Ryasnianskiy
 """
 
 import os
@@ -124,3 +127,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media/')
+MEDIA_URL = '/media/'

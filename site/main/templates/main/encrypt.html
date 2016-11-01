@@ -2,8 +2,8 @@
  This file was created on October 28th, 2016
  by Deborah Venuti
 
- Last updated on: October 28th, 2016
- Updated by: Deborah Venuti
+ Last updated on: October 31, 2016
+ Updated by: Gene Ryasnianskiy
 -->
 {% extends 'main/base.html' %}
 {% load static %}
@@ -14,7 +14,34 @@
             <div class="col-md-3 col-centered"></div>
             <div class="col-md-6 col-centered" align="center">
                 <h3>Encrypt Here</h3>
-                <p>TODO: Handle the uploading of carrier image and image/message to encrypt.</p>
+                <!-- List of uploaded documents -->
+                    {% if documents %}
+                        <ul>
+                        {% for document in documents %}   
+                            <li><a href="{{ document.image.url }}">{{ document.image }}</a></li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No documents.</p>
+                    {% endif %}
+                    <!-- Upload form. Note enctype attribute! -->
+                    <form action="{% url 'encrypt' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p>{{ form.non_field_errors }}</p>
+                        <p>{{ form.carrierImage.label_tag }} {{ form.carrierImage.help_text }}</p>
+                        <p>
+                            {{ form.carrierImage.errors }}
+                            {{ form.carrierImage }}
+                        </p>
+                        {% csrf_token %}
+                        <p>{{ form.non_field_errors }}</p>
+                        <p>{{ form.dataImage.label_tag }} {{ form.dataImage.help_text }}</p>
+                        <p>
+                            {{ form.dataImage.errors }}
+                            {{ form.dataImage }}
+                        </p>
+                        <p><input type="submit" value="Upload" /></p>
+                    </form>
             </div>
             <div class="col-md-3 col-centered"></div>
         </div>

@@ -2,17 +2,22 @@
  This file was created on October 15th, 2016
  by Deborah Venuti, Bethany Sanders and James Riley
 
- Last updated on: October 28th, 2016
- Updated by: Deborah Venuti
+ Last updated on: October 31, 2016
+ Updated by: Gene Ryasnianskiy
 """
 
+#Django Imports
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, render_to_response
+from django.shortcuts import get_object_or_404
 
-from .forms import RegisterForm, SignInForm
+#App Imports
+from .models import stegaImage
+from .forms import RegisterForm, SignInForm, ImageForm
+from .stega import imageOut
 
 def index(request):
     return render(request, 'main/index.html')
@@ -28,10 +33,36 @@ def profile(request):
     return render(request, 'main/profile.html', {'title': title})
 
 # Deborah Venuti added this
+# Gene Ryasnianskiy image upload and processing
 @login_required(login_url='main/signin.html')
 def encrypt(request):
     title = 'Encrypt'
-    return render(request, 'main/encrypt.html', {'title': title})
+    
+    userObject = User.objects.get(username = request.user.username)
+    #print(userObject)
+    # Handle file upload
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():   
+            
+            carrierImg = stegaImage.objects.create(uploader = request.user, image = request.FILES['carrierImage'])
+            carrierImg.save()
+            
+            dataImg = stegaImage.objects.create(uploader = request.user, image = request.FILES['dataImage'])
+            dataImg.save()
+            
+            outputImg = stegaImage.objects.create(uploader = request.user)
+            outputImg.image.save(outputImg.image.name + '/out.png', imageOut(carrierImg.image, dataImg.image))
+            outputImg.save()
+
+            return HttpResponseRedirect('/profile')
+    else:
+        form = ImageForm()
+
+    # Load documents for the list page
+    documents = stegaImage.objects.all().filter(uploader = request.user)
+
+    return render(request, 'main/encrypt.html', {'documents': documents, 'form': form, 'title':title})
 
 # Deborah Venuti added return of invalid indicator for sign in attempt of non-existing account
 def signin(request):
