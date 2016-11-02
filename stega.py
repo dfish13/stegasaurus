@@ -4,92 +4,37 @@
 
 
 from PIL import Image
-import matplotlib.pyplot as plt
-import numpy as np
-import struct
-
-
-# mode encoding
-d = {'unicode':0, 'L':1, 'RGB':3, 'RGBA':4}
-
-# bit mask for extracting bits from bytes
-bit_mask = b'\x80\x40\x20\x10\x08\x04\x02\x01'
 
 
 
+# bit mask for extracting 2 bits per byte
+bit_mask = b'\xc0\x30\x0c\x03'
 
 
-def inject_png(carrier, hidden, output):
+def available_bytes(carrier):
     '''
-    recieves 3 PNG file objects
-    stores data from hidden in carrier and saves result to output
+    returns number of bytes that can be stored inside carrier
+    using lsb substitution (2 bits per byte)
     '''
-    carrier_img = Image.open(carrier) 
-    hidden_img = Image.open(hidden) 
-    hidden_bytes = add_header(hidden_img.mode, hidden_img.tobytes(), *hidden_img.size)
-    carrier_bytes = inject_bytes(carrier_img.tobytes(), hidden_bytes)
-    print(len(carrier_bytes), hidden_img.size)
-    output_img = Image.frombytes(carrier_img.mode, carrier_img.size, carrier_bytes)
-    output_img.save(output)
-
-
-def inject_text(carrier, text, output):
-    '''
-    stores unicode text inside carrier and saves result to output
-    '''
-    carrier_img = Image.open(carrier)
-    text_bytes = text.encode()
-    text_bytes = add_header('unicode', text_bytes, len(text_bytes))
-    carrier_bytes = inject_bytes(carrier_img.tobytes(), text_bytes)
-    output_img = Image.frombytes(carrier_img.mode, carrier_img.size, carrier_bytes)
-    output_img.save(output)
-
+    img = Image.open(carrier)
+    img_bytes = img.tobytes()
+    return len(img_bytes)//4
+    
 
 def inject_bytes(bs1, bs2):
     '''
     accepts two bytes objects bs1 and bs2 and injects the bytes of 
-    bs2 one bit at a time into the least significant bit of each
+    bs2 2 bits at a time into the least significant bits of each
     byte of bs1. Checks to ensure bs1 is large enough to hold the
     bits of bs2
     '''
-    if len(bs1) < 8*len(bs2):
+    if len(bs1) < 4*len(bs2):
         return
     ba = bytearray(bs1)
     for i, byte in enumerate(bs2):
-        for j in range(8):
-            ba[8*i+j] = (ba[8*i+j] & 254) | ((bit_mask[j] & byte) >> (7-j))
+        for j in range(4):
+            ba[4*i+j] = (ba[4*i+j] & 252) | ((bit_mask[j] & byte) >> 2*(3-j))
     return bytes(ba)
-
-
-def add_header(mode, data, x, y=1):
-	'''
-	mode -> string describing the type of data ('text', 'rgb', 'g', 'rgba')
-	x, y -> dimensions of the image or number of bytes
-	data -> a bytes object representing the object
-	returns a byte array with header information describing the data 
-	'''
-	header = struct.pack('III', d[mode], x, y)
-	return header + data
-
-
-def unpack_bytes(data):
-    '''
-    parses a bytes object
-    returns a tuple with the header and the data segment
-    '''
-    header = struct.unpack('III', extract_n_bytes(data, 12))
-    data_segment = extract_n_bytes(data[96:], data_length(header) )
-    return header , data_segment
-
-
-def data_length(header):
-    '''
-    given a header return the number of bytes in the data segment
-    '''
-    if header[0] == 0 :
-        return header[1]
-    else :
-        return header[1] * header[2]
 
 
 def extract_n_bytes(data, n):
@@ -97,12 +42,59 @@ def extract_n_bytes(data, n):
     returns a bytes object that is n bytes long and consists
     of the least significant bits of data
     '''
-    if len(data) < 8*n :
+    if len(data) < 4*n :
         return
     ba = bytearray(n)
-    for i in range(8*n):
-        ba[i//8] = ba[i//8] | ((data[i] & 1) << (7 - (i%8)))
-    return bytes(ba) 
+    for i in range(4*n):
+        ba[i//4] = ba[i//4] | ((data[i] & 3) << 2*(3 - (i%4)))
+    return bytes(ba)
+
+
+def pack(data):
+    '''
+    appends a 4 byte field specifying the length of data
+    '''
+    length = len(data).to_bytes(4, byteorder='big')
+    return length + data
+
+
+def unpack(data):
+    '''
+    parses a bytes object
+    returns a tuple with the length and the data segment
+    '''
+    length = int.from_bytes(extract_n_bytes(data, 4), byteorder='big')
+    data_segment = extract_n_bytes(data[16:], length)
+    return length , data_segment
+ 
+
+def inject_file(carrier, hidden, output):
+    '''
+    recieves 3 file objects
+    stores data from hidden in carrier and saves result to output
+    '''
+    img = Image.open(carrier)  
+    hidden_bytes = hidden.read()
+    output_bytes = inject_bytes(img.tobytes(), pack(hidden_bytes))
+    img = Image.frombytes(img.mode, img.size, output_bytes)
+    img.save(output, format='PNG')
+
+
+def inject_text(carrier, text, output):
+    '''
+    stores unicode text inside carrier and saves result to output
+    '''
+    img = Image.open(carrier)
+    text_bytes = text.encode()
+    output_bytes = inject_bytes(img.tobytes(), pack(text_bytes))
+    img = Image.frombytes(img.mode, img.size, output_bytes)
+    img.save(output, format='PNG')
+
+
+def extract_file(carrier, output):
+    img = Image.open(carrier)
+    length, output_bytes = unpack(img.tobytes())
+    output.write(output_bytes)
 
 
 def extract_text(carrier):
@@ -111,11 +103,9 @@ def extract_text(carrier):
     returns the string
     '''
     img = Image.open(carrier)
-    header, text_bytes = unpack_bytes(img.tobytes())
+    length, text_bytes = unpack(img.tobytes())
     text = text_bytes.decode()
     return text
-
-
 
 
 
@@ -123,38 +113,28 @@ def extract_text(carrier):
 
 if __name__ == "__main__" :
 
-    print('1 -> inject text', '2 -> inject image', '3 -> extract text', '4 -> extract image', sep='\n')
+    print('1 -> inject text', '2 -> inject file', '3 -> extract text', '4 -> extract file', sep='\n')
     choice = int(input('choice: '))
 
-    if choice == 1 :
-        carrier_path = input('image path: ')
-        text = input('input a string: ')
-        inject_text(carrier_path, text, 'output.png')
-        img = Image.open('pings/output.png')
-    elif choice == 2 :
-        carrier_path = input('carrier image path: ') 
-        hidden_path = input('hidden image path: ')
-        inject_png(carrier_path, hidden_path, 'output.png')
-        img = Image.open('pings/output.png')
-    elif choice == 3 :
-        path = input('image path: ')
-        text = extract_text(path)
-        print(text)
-        img = Image.open('pings/output.png')
-        
-    elif choice == 4 :
-        path = input('image path: ')
-        img = Image.open(path)
-        header, img_bytes = unpack_bytes(img.tobytes())
-        for key , val in d.items():
-            if header[0] == val :
-                mode = key
-        img = Image.frombytes(mode, header[1:], img_bytes)
-    else :
+    if choice == 1:
+        carrier = open(input('carrier path: '), 'rb')
+        text = input('enter a string: ')
+        output = open('pings/output.png', 'wb')
+        inject_text(carrier, text, output)
+    elif choice == 2:
+        carrier = open(input('carrier path: '), 'rb')
+        hidden = open(input('hidden path: '), 'rb')
+        output = open('pings/output.png', 'wb')
+        inject_file(carrier, hidden, output)
+    elif choice == 3:
+        carrier = open(input('carrier path: '), 'rb')
+        text = extract_text(carrier)
+        print(text)   
+    elif choice == 4:
+        carrier = open(input('carrier path: '), 'rb')
+        output = open(input('output path: '), 'wb')
+        extract_file(carrier, output)  
+    else:
         exit(1)
 
-    # display modified or extracted image
-    im_array = np.array(img)
-    plt.imshow(im_array)
-    plt.show()
 

@@ -2,8 +2,11 @@
  This file was created on October 15th, 2016
  by Deborah Venuti
 
- Last updated on: October 31, 2016
- Updated by: Gene Ryasnianskiy
+ Contributors: Deborah Venuti, Gene Ryasnianskiy
+
+
+ Last updated on: November 1, 2016
+ Updated by: Duncan Fisher
 """
 
 from django import forms
@@ -20,5 +23,5 @@ class SignInForm(forms.Form):
 
 # Added: Gene Ryasnianskiy October 31, 2016
 class ImageForm(forms.Form):
-    carrierImage = forms.FileField(label='Select a carrier file')
-    dataImage = forms.FileField(label='Select a data file')
+    carrier = forms.ImageField(label='Carrier file')
+    data_file = forms.FileField(label='Data file')

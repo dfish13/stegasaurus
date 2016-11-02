@@ -2,8 +2,11 @@
  This file was created on October 15th, 2016
  by Deborah Venuti, Bethany Sanders and James Riley
 
- Last updated on: October 31, 2016
- Updated by: Gene Ryasnianskiy
+ Contributors: Deborah Venuti, Bethany Sanders,
+  James Riley, Gene Ryasnianskiy
+
+Last updated on: November 1, 2016
+Updated by: Duncan Fisher
 """
 
 #Django Imports
@@ -11,13 +14,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render, render_to_response
+from django.core.files.base import ContentFile
+from django.shortcuts import render, render_to_response, reverse
 from django.shortcuts import get_object_or_404
 
 #App Imports
 from .models import stegaImage
 from .forms import RegisterForm, SignInForm, ImageForm
-from .stega import imageOut
+from . import stega
 
 def index(request):
     return render(request, 'main/index.html')
@@ -45,17 +49,13 @@ def encrypt(request):
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():   
             
-            carrierImg = stegaImage.objects.create(uploader = request.user, image = request.FILES['carrierImage'])
-            carrierImg.save()
-            
-            dataImg = stegaImage.objects.create(uploader = request.user, image = request.FILES['dataImage'])
-            dataImg.save()
-            
-            outputImg = stegaImage.objects.create(uploader = request.user)
-            outputImg.image.save(outputImg.image.name + '/out.png', imageOut(carrierImg.image, dataImg.image))
-            outputImg.save()
-
-            return HttpResponseRedirect('/profile')
+            output = ContentFile(bytes(0))
+            carrier = form.cleaned_data['carrier']
+            data_file = form.cleaned_data['data_file']
+            stega.inject_file(carrier, data_file , output)
+            new = stegaImage(uploader=request.user)
+            new.image.save(carrier.name, output, save=True )
+            return HttpResponseRedirect(reverse('profile'))
     else:
         form = ImageForm()
 

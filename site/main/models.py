@@ -2,8 +2,10 @@
  This file was created on October 15th, 2016
  by Deborah Venuti
 
-Last updated on: October 31th, 2016
-Updated by: Gene Ryasnianskiy
+ Contributors: Deborah Venuti, Gene Ryasnianskiy
+
+Last updated on: November 1, 2016
+Updated by: Duncan Fisher
 """
 
 from django.db import models
