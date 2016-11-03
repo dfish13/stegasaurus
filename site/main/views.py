@@ -155,6 +155,8 @@ def signin(request):
                 return HttpResponseRedirect('/profile')
             else:
                 return render(request, 'main/signin.html', {'form':form, 'invalid': True})
+        else:
+             return render(request, 'main/signin.html', {'form':form, 'invalid': True})
 
     else:
         form = SignInForm()
