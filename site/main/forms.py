@@ -29,3 +29,6 @@ class ImageForm(forms.Form):
 class TextForm(forms.Form):
     carrier = forms.ImageField()
     text = forms.CharField(widget=forms.Textarea)
+
+class CarrierForm(forms.Form):
+    carrier = forms.ImageField()

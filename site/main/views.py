@@ -20,7 +20,7 @@ from django.shortcuts import get_object_or_404
 
 #App Imports
 from .models import stegaImage
-from .forms import RegisterForm, SignInForm, ImageForm, TextForm
+from .forms import RegisterForm, SignInForm, ImageForm, TextForm, CarrierForm
 from . import stega
 
 def index(request):
@@ -48,27 +48,48 @@ def encrypt(request):
     if request.method == 'POST':
         image_form = ImageForm(request.POST, request.FILES)
         text_form = TextForm(request.POST, request.FILES)
+        carrier_form = CarrierForm(request.POST, request.FILES)
+        
         if image_form.is_valid():
-
             output = ContentFile(bytes(0))
             carrier = image_form.cleaned_data['carrier']
             data_file = image_form.cleaned_data['data_file']
             stega.inject_file(carrier, data_file , output)
             new = stegaImage(uploader=request.user)
             new.image.save(carrier.name, output, save=True )
-            return HttpResponseRedirect(reverse('profile'))
+            return HttpResponseRedirect(reverse('encrypt'))
 
         if text_form.is_valid():
-            pass
+            output = ContentFile(bytes(0))
+            carrier = text_form.cleaned_data['carrier']
+            text = text_form.cleaned_data['text']
+            stega.inject_text(carrier, text , output)
+            new = stegaImage(uploader=request.user)
+            new.image.save(carrier.name, output, save=True )
+            return HttpResponseRedirect(reverse('encrypt'))
+
+        if carrier_form.is_valid():
+            carrier = text_form.cleaned_data['carrier']
+            message = stega.extract_text(carrier)
+
     else:
+        message = ''
         image_form = ImageForm()
         text_form = TextForm()
+        carrier_form = CarrierForm()
 
 
     # Load documents for the list page
     documents = stegaImage.objects.all().filter(uploader = request.user)
-
-    return render(request, 'main/encrypt.html', {'documents': documents, 'image_form': image_form, 'text_form': text_form, 'title':title})
+    context = {
+        'documents': documents,
+        'image_form': image_form,
+        'text_form': text_form,
+        'carrier_form': carrier_form,
+        'title': title,
+        'message': message,
+        }
+    return render(request, 'main/encrypt.html', context)
 
 # Deborah Venuti added return of invalid indicator for sign in attempt of non-existing account
 def signin(request):
