@@ -20,7 +20,7 @@ from django.shortcuts import get_object_or_404
 
 #App Imports
 from .models import stegaImage
-from .forms import RegisterForm, SignInForm, ImageForm
+from .forms import RegisterForm, SignInForm, ImageForm, TextForm
 from . import stega
 
 def index(request):
@@ -41,28 +41,34 @@ def profile(request):
 @login_required(login_url='main/signin.html')
 def encrypt(request):
     title = 'Encrypt'
-    
+
     userObject = User.objects.get(username = request.user.username)
     #print(userObject)
     # Handle file upload
     if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
-        if form.is_valid():   
-            
+        image_form = ImageForm(request.POST, request.FILES)
+        text_form = TextForm(request.POST, request.FILES)
+        if image_form.is_valid():
+
             output = ContentFile(bytes(0))
-            carrier = form.cleaned_data['carrier']
-            data_file = form.cleaned_data['data_file']
+            carrier = image_form.cleaned_data['carrier']
+            data_file = image_form.cleaned_data['data_file']
             stega.inject_file(carrier, data_file , output)
             new = stegaImage(uploader=request.user)
             new.image.save(carrier.name, output, save=True )
             return HttpResponseRedirect(reverse('profile'))
+
+        if text_form.is_valid():
+            pass
     else:
-        form = ImageForm()
+        image_form = ImageForm()
+        text_form = TextForm()
+
 
     # Load documents for the list page
     documents = stegaImage.objects.all().filter(uploader = request.user)
 
-    return render(request, 'main/encrypt.html', {'documents': documents, 'form': form, 'title':title})
+    return render(request, 'main/encrypt.html', {'documents': documents, 'image_form': image_form, 'text_form': text_form, 'title':title})
 
 # Deborah Venuti added return of invalid indicator for sign in attempt of non-existing account
 def signin(request):
@@ -97,7 +103,7 @@ def register(request):
 
             try:
                 user = User.objects.get(username=formData['email'])
-            
+
             except User.DoesNotExist:
                 user = User.objects.create_user(formData['email'], formData['email'], formData['password'], first_name=formData['first_name'], last_name=formData['last_name'])
                 user.save()

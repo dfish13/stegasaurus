@@ -25,3 +25,7 @@ class SignInForm(forms.Form):
 class ImageForm(forms.Form):
     carrier = forms.ImageField(label='Carrier file')
     data_file = forms.FileField(label='Data file')
+
+class TextForm(forms.Form):
+    carrier = forms.ImageField()
+    text = forms.CharField(widget=forms.Textarea)
