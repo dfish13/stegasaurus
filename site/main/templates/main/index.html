@@ -10,18 +10,33 @@
 
 <!-- begin body content block -->
 {% block content %}
-    <div class="container">
-        <div class="row row-centered">    
-            <div class="col-md-3 col-centered"></div>
-            <div class="col-md-6 col-centered" align="center">
-                <img src="{% static 'main/images/stegsmall.png' %}">    
-                <h3>
-                    Please sign in to use Stegasaurus.
-                </h3>
+    {% if user.is_authenticated %}
+        <div class="container">
+            <div class="row row-centered">    
+                <div class="col-md-3 col-centered"></div>
+                <div class="col-md-6 col-centered" align="center">
+                    <img src="{% static 'main/images/stegsmall.png' %}">    
+                    <h3>
+                        Hello, {{ user.first_name }}. <br> Welcome to Stegasaurus!
+                    </h3>
+                </div>
+                <div class="col-md-3 col-centered"></div>
             </div>
-            <div class="col-md-3 col-centered"></div>
         </div>
-    </div>
+    {% else %}
+        <div class="container">
+            <div class="row row-centered">    
+                <div class="col-md-3 col-centered"></div>
+                <div class="col-md-6 col-centered" align="center">
+                    <img src="{% static 'main/images/stegsmall.png' %}">    
+                    <h3>
+                        Please sign in to use Stegasaurus.
+                    </h3>
+                </div>
+                <div class="col-md-3 col-centered"></div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 <!-- end body content block -->
 

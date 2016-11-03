@@ -3,10 +3,10 @@
  by Deborah Venuti, Bethany Sanders and James Riley
 
  Contributors: Deborah Venuti, Bethany Sanders,
-  James Riley, Gene Ryasnianskiy
+  James Riley, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 1, 2016
-Updated by: Duncan Fisher
+Last updated on: November 3, 2016
+Updated by: Alexander Sumner
 """
 
 #Django Imports
@@ -19,8 +19,8 @@ from django.shortcuts import render, render_to_response, reverse
 from django.shortcuts import get_object_or_404
 
 #App Imports
-from .models import stegaImage
-from .forms import RegisterForm, SignInForm, ImageForm, TextForm, CarrierForm
+from .models import stegaImage, stegaExtractedFile
+from .forms import RegisterForm, SignInForm, ImageForm, TextForm, CarrierForm, ImageDecryptForm
 from . import stega
 
 def index(request):
@@ -90,6 +90,52 @@ def encrypt(request):
         'message': message,
         }
     return render(request, 'main/encrypt.html', context)
+
+#Alexander Sumner - tab for decrypting images 
+@login_required(login_url='main/signin.html')
+def decrypt(request):
+    title = 'Decrypt'
+
+    #gather user information
+    userObject = User.objects.get(username = request.user.username)
+
+    if (request.method == 'POST'):
+        carrier_form = CarrierForm(request.POST, request.FILES)
+        image_decrypt_form = ImageDecryptForm(request.POST, request.FILES)
+
+        #form for extracting text
+        if carrier_form.is_valid():
+            carrier = carrier_form.cleaned_data['carrier']
+            message = stega.extract_text(carrier)
+
+
+        #form for extracting images/other files
+        if image_decrypt_form.is_valid():
+            output = ContentFile(bytes(0))
+            carrier = image_decrypt_form.cleaned_data['carrier']
+            #extracting is currently in development
+            stega.extract_file(carrier, output)
+            new = stegaExtractedFile(uploader=request.user)
+            new.image.save(carrier.name, output, save=True )
+            return HttpResponseRedirect(reverse('decrypt'))
+    
+    else:
+        message = ''
+        carrier_form = CarrierForm()
+        image_decrypt_form = ImageDecryptForm()
+
+
+    context = {
+        #'documents': documents,
+        'image_decrypt_form': image_decrypt_form,
+        'carrier_form': carrier_form,
+        'title': title,
+        'message': message,
+        }
+
+    return render(request, 'main/decrypt.html', context)
+
+
 
 # Deborah Venuti added return of invalid indicator for sign in attempt of non-existing account
 def signin(request):
