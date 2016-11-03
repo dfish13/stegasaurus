@@ -1,8 +1,8 @@
 <!--
- This file was created on October 28th, 2016
- by Deborah Venuti
+ This file was created on November 3rd, 2016
+ by Alexander Sumner
 
- Last updated on: November 3, 2016
+ Last updated on: November 3rd, 2016
  Updated by: Alexander Sumner
 -->
 {% extends 'main/base.html' %}
@@ -14,32 +14,24 @@
 		<div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
     	 <div class="well profile">
 				 <div class="text-center">
-					 <h2>Encrypt Here</h2>
-           <button class="btn btn-primary profile-buttons" onclick="show('id1');"> Encrypt File</button>
-					 <button class="btn btn-primary profile-buttons" onclick="show('id2');"> Encrypt Text</button>
+					 <h2>Decrypt Here</h2>
+           <button class="btn btn-primary profile-buttons" onclick="show('id1');"> Decrypt File</button>
+					 <button class="btn btn-primary profile-buttons" onclick="show('id2');"> Decrypt Text</button>
 					 <p>
 					 	<div id="id1"  style="display:none">
-              {%if documents%}
-                <ul>
-                  {% for document in documents %}
-                    <li><a href="{{ document.image.url }}">{{ document.image }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% else %}
-                  <p>No documents.</p>
-              {% endif %}
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
-                  {{ image_form.as_p }}
+                  {{ image_decrypt_form.as_p }}
                   <input type="submit" value="Submit"/>
               </form>
 						</div>
 					 	<div id="id2"  style="display:none">
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
-                  {{ text_form.as_p }}
+                  {{ carrier_form.as_p }}
                   <input type="submit" value="Submit"/>
               </form>  
+              <p>{{ message }}</p> 
             </div>
 					 </p>
 				 </div>
@@ -61,3 +53,4 @@
     </script>
     {% endblock %}
 <!-- end script block -->
+
