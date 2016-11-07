@@ -5,7 +5,7 @@
  Contributors: Deborah Venuti, Bethany Sanders,
   James Riley, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 3, 2016
+Last updated on: November 7, 2016
 Updated by: Alexander Sumner
 """
 
@@ -20,7 +20,7 @@ from django.shortcuts import get_object_or_404
 
 #App Imports
 from .models import stegaImage, stegaExtractedFile
-from .forms import RegisterForm, SignInForm, ImageForm, TextForm, CarrierForm, ImageDecryptForm
+from .forms import RegisterForm, SignInForm, ImageForm, TextForm, TextDecryptForm, ImageDecryptForm
 from . import stega
 
 def index(request):
@@ -43,12 +43,11 @@ def encrypt(request):
     title = 'Encrypt'
 
     userObject = User.objects.get(username = request.user.username)
-    #print(userObject)
+    #print(userObject
     # Handle file upload
     if request.method == 'POST':
         image_form = ImageForm(request.POST, request.FILES)
         text_form = TextForm(request.POST, request.FILES)
-        carrier_form = CarrierForm(request.POST, request.FILES)
         
         if image_form.is_valid():
             output = ContentFile(bytes(0))
@@ -56,7 +55,7 @@ def encrypt(request):
             data_file = image_form.cleaned_data['data_file']
             stega.inject_file(carrier, data_file , output)
             new = stegaImage(uploader=request.user)
-            new.image.save(carrier.name, output, save=True )
+            new.image.save(carrier.name, output)
             return HttpResponseRedirect(reverse('encrypt'))
 
         if text_form.is_valid():
@@ -65,29 +64,22 @@ def encrypt(request):
             text = text_form.cleaned_data['text']
             stega.inject_text(carrier, text , output)
             new = stegaImage(uploader=request.user)
-            new.image.save(carrier.name, output, save=True )
+            new.image.save(carrier.name, output)
             return HttpResponseRedirect(reverse('encrypt'))
 
-        if carrier_form.is_valid():
-            carrier = text_form.cleaned_data['carrier']
-            message = stega.extract_text(carrier)
-
     else:
-        message = ''
         image_form = ImageForm()
         text_form = TextForm()
-        carrier_form = CarrierForm()
 
 
     # Load documents for the list page
     documents = stegaImage.objects.all().filter(uploader = request.user)
+
     context = {
         'documents': documents,
         'image_form': image_form,
         'text_form': text_form,
-        'carrier_form': carrier_form,
         'title': title,
-        'message': message,
         }
     return render(request, 'main/encrypt.html', context)
 
@@ -100,13 +92,13 @@ def decrypt(request):
     userObject = User.objects.get(username = request.user.username)
 
     if (request.method == 'POST'):
-        carrier_form = CarrierForm(request.POST, request.FILES)
+        text_decrypt_form = TextDecryptForm(request.POST, request.FILES)
         image_decrypt_form = ImageDecryptForm(request.POST, request.FILES)
 
         #form for extracting text
-        if carrier_form.is_valid():
-            carrier = carrier_form.cleaned_data['carrier']
-            message = stega.extract_text(carrier)
+        if text_decrypt_form.is_valid():
+            carrier = text_decrypt_form.cleaned_data['carrier']
+            text_decrypt_form.message = stega.extract_text(carrier)
 
 
         #form for extracting images/other files
@@ -116,21 +108,18 @@ def decrypt(request):
             #extracting is currently in development
             stega.extract_file(carrier, output)
             new = stegaExtractedFile(uploader=request.user)
-            new.image.save(carrier.name, output, save=True )
+            new.image.save(carrier.name, output)
             return HttpResponseRedirect(reverse('decrypt'))
     
     else:
-        message = ''
-        carrier_form = CarrierForm()
+        text_decrypt_form = TextDecryptForm()
         image_decrypt_form = ImageDecryptForm()
 
 
     context = {
-        #'documents': documents,
         'image_decrypt_form': image_decrypt_form,
-        'carrier_form': carrier_form,
+        'text_decrypt_form': text_decrypt_form,
         'title': title,
-        'message': message,
         }
 
     return render(request, 'main/decrypt.html', context)

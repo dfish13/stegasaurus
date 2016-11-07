@@ -5,7 +5,7 @@
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
 
- Last updated on: November 3, 2016
+ Last updated on: November 7, 2016
  Updated by: Alexander Sumner
 """
 
@@ -30,8 +30,9 @@ class TextForm(forms.Form):
     carrier = forms.ImageField()
     text = forms.CharField(widget=forms.Textarea)
 
-class CarrierForm(forms.Form):
+class TextDecryptForm(forms.Form):
     carrier = forms.ImageField(label='Encrypted Image')
+    message = ''
 
 # Added: Alexander Sumner November 3, 2016
 class ImageDecryptForm(forms.Form):

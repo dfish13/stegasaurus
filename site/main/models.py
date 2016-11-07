@@ -4,7 +4,7 @@
 
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 3, 2016
+Last updated on: November 7, 2016
 Updated by: Alexander Sumner
 """
 
@@ -19,7 +19,7 @@ class stegaImage(models.Model):
     
     uploader = models.ForeignKey(User, unique=False)
     image = models.ImageField(upload_to=user_directory_path)
-    
+      
 class stegaFile(models.Model):
     def user_directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
