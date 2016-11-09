@@ -7,29 +7,46 @@
 """
 
 
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, Client
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from . import views
 
 class TestCalls(TestCase):
 
+
 	#test index page
 	def test_index_view_loads(self):
 		self.client.login(userName='test@steg.com', userPassword='testpassword')
-		response = self.client.get('/')
+		response = self.client.get('/', follow=True)
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'main/index.html')		
 
 	#test about page
 	def test_about_view_loads(self):
 		self.client.login(userName='test@steg.com', userPassword='testpassword')
-		response = self.client.get('/about')
+		response = self.client.get('/about', follow=True)
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'main/about.html')
 
 	#test redirect profile access
-	#def test_profile_view_invalid(self):
+	def test_profile_view_invalid(self):
+		self.user = User.objects.create_user(username='test@steg.com', password='testpassword')
+		self.user.save()
 
+		self.client.login(username='fake@steg.com', userpassword='fake')
+		response = self.client.get('/profile', follow=False)
+		self.assertEqual(response.status_code, 302)
 
+	#test profile access
+	def test_profile_view_valid(self):
+		self.user = User.objects.create_user(username='test@steg.com', password='testpassword')
+		self.user.save()
+
+		self.client.login(username='test@steg.com', password='testpassword')
+		response = self.client.get('/profile', follow=True)
+		self.assertEqual(response.status_code, 200)
+		self.assertTemplateUsed(response, 'main/profile.html')
 
 	#test signin page
 	def test_signin_view_loads(self):
@@ -42,11 +59,8 @@ class TestCalls(TestCase):
 	def test_signin_view_valid(self):
 		self.client.login(userName='test@steg.com', userPassword='testpassword')
 		response = self.client.post('/signin', {'username':'test@steg.com', 'password':'testpassword'}, follow=True)
-		
-		#response is giving a 200 instead of 302, dont know why		
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'main/signin.html')
-		#self.assertRedirects(response, '/profile')
 
 	#test invalid login
 	def test_signin_view_invalid(self):
@@ -54,7 +68,6 @@ class TestCalls(TestCase):
 		response = self.client.post('/signin', {'username':'test@steg.com', 'password':'badpass'}, follow=False)
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'main/signin.html')
-		#self.assertRedirects(response, '/signin')
 
 	#test blank login message
 	#def test_call_view_fails_blank(self):
