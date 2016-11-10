@@ -36,7 +36,20 @@ To run stega.py type
 $ python3 stega.py
 ```
 and hit enter.
+
 You will be presented with a few options and prompted to choose one of the test functions.
+
+### How to Run Test Suite
+
+The module tests.py is executable and is run through the module manage.py.
+To run tests.py ensure you are in the directory with the manage.py module.
+```sh
+$ python3 manage.py test
+```
+
+and hit enter.
+
+You will be presented with an OK message if all tests executed correctly.
 
 ***
 
