@@ -11,6 +11,7 @@ Updated by: Alexander Sumner
 
 #Python Imports
 import tarfile
+import os
 
 #Django Imports
 from django.http import HttpResponse, HttpResponseRedirect
@@ -86,6 +87,11 @@ def encrypt(request):
             #save the tar file if we want to use it later
             newdata = stegaFile(uploader=request.user)
             newdata.file.save(datas.name, datas.file)
+
+            #close the file objects and delete the temp tar file
+            datas.close()
+            data.close()
+            os.remove(data.name)
 
             #save the steganographed image to the users database
             newimage = stegaImage(uploader=request.user)
