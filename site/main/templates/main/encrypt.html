@@ -30,7 +30,7 @@
               {% endif %}
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
-                  {{ image_form.as_p }}
+                  {{ multiple_data_form.as_p }}
                   <input type="submit" value="Submit"/>
               </form>
 						</div>
