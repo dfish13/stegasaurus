@@ -5,11 +5,12 @@
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
 
- Last updated on: November 3, 2016
+ Last updated on: November 12, 2016
  Updated by: Alexander Sumner
 """
 
 from django import forms
+from multiupload.fields import MultiFileField
 
 class RegisterForm(forms.Form):
     first_name = forms.CharField(label='First Name', max_length=100)
@@ -30,9 +31,14 @@ class TextForm(forms.Form):
     carrier = forms.ImageField()
     text = forms.CharField(widget=forms.Textarea)
 
-class CarrierForm(forms.Form):
+class TextDecryptForm(forms.Form):
     carrier = forms.ImageField(label='Encrypted Image')
+    message = ''
 
 # Added: Alexander Sumner November 3, 2016
 class ImageDecryptForm(forms.Form):
     carrier = forms.ImageField(label='Encrypted Image')
+
+class MultipleDataForm(forms.Form):
+    carrier = forms.ImageField(label='Carrier File')
+    Files = MultiFileField(label='Data Files')

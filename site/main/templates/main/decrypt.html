@@ -2,7 +2,7 @@
  This file was created on November 3rd, 2016
  by Alexander Sumner
 
- Last updated on: November 3rd, 2016
+ Last updated on: November 7, 2016
  Updated by: Alexander Sumner
 -->
 {% extends 'main/base.html' %}
@@ -28,10 +28,10 @@
 					 	<div id="id2"  style="display:none">
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
-                  {{ carrier_form.as_p }}
+                  {{ text_decrypt_form.as_p }}
                   <input type="submit" value="Submit"/>
               </form>  
-              <p>{{ message }}</p> 
+              <p>{{ text_decrypt_form.message }}</p> 
             </div>
 					 </p>
 				 </div>

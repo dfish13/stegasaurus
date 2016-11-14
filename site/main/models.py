@@ -4,7 +4,7 @@
 
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 3, 2016
+Last updated on: November 12, 2016
 Updated by: Alexander Sumner
 """
 
@@ -19,14 +19,14 @@ class stegaImage(models.Model):
     
     uploader = models.ForeignKey(User, unique=False)
     image = models.ImageField(upload_to=user_directory_path)
-    
+      
 class stegaFile(models.Model):
     def user_directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
         return 'user_{0}/{1}'.format(instance.uploader.id, filename)
     
     uploader = models.ForeignKey(User, unique=False)
-    image = models.FileField(upload_to=user_directory_path)
+    file = models.FileField(upload_to=user_directory_path)
 
 
 #Alexander Sumner added extracted file model
@@ -36,4 +36,12 @@ class stegaExtractedFile(models.Model):
         return 'user_{0}/{1}'.format(instance.uploader.id, filename)
     
     uploader = models.ForeignKey(User, unique=False)
-    image = models.FileField(upload_to=user_directory_path)
+    file = models.FileField(upload_to=user_directory_path)
+
+class tempFile(models.Model):
+    def user_directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return 'user_{0}/{1}'.format(instance.uploader.id, filename)
+    
+    uploader = models.ForeignKey(User, unique=False)
+    file = models.FileField(upload_to=user_directory_path)
