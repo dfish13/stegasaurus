@@ -17,8 +17,8 @@
 				 <div class="text-center">
 					 <h2>{{ user.first_name }} {{user.last_name}}</h2>
 					 <button class="btn btn-primary" onclick="show('id1');"> Details </button>
-					 <button class="btn btn-primary" onclick="show('id2');"> Archive </button>
-					 <button class="btn btn-primary" onclick="show('id3');"> Settings </button>
+					 <button id="archive" class="btn btn-primary" onclick="show('id2');"> Archive </button>
+					 <button id="settings" class="btn btn-primary"> Settings </button>
 
 					 <p>
 					 	<div id="id1"  style="display:none">
@@ -62,7 +62,6 @@
 							  </tbody>
 							</table> 
 					 	</div>
-					 	<div id="id3"  style="display:none">text 3</div>
 					 </p>
 				 </div>
     	 </div>
@@ -77,7 +76,6 @@
 		function show(elementId) {
 		 document.getElementById("id1").style.display="none";
 		 document.getElementById("id2").style.display="none";
-		 document.getElementById("id3").style.display="none";
 		 document.getElementById(elementId).style.display="block";
 		}
 		</script>
