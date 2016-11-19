@@ -42,6 +42,12 @@ def profile(request):
     title = 'Profile'
     return render(request, 'main/profile.html', {'title': title})
 
+# Deborah Venuti added login_required decorator
+@login_required(login_url='main/signin.html')
+def settings(request):
+    title = 'Settings'
+    return render(request, 'main/settings.html', {'title': title})
+
 # Deborah Venuti added this
 # Gene Ryasnianskiy image upload and processing
 # Alex Sumner modified to accept multiple images and tar them 

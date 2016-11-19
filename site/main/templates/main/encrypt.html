@@ -15,8 +15,8 @@
     	 <div class="well profile">
 				 <div class="text-center">
 					 <h2>Encrypt Here</h2>
-           <button class="btn btn-primary profile-buttons" onclick="show('id1');"> Encrypt File</button>
-					 <button class="btn btn-primary profile-buttons" onclick="show('id2');"> Encrypt Text</button>
+           <button class="btn btn-primary" onclick="show('id1');"> Encrypt File</button>
+					 <button class="btn btn-primary" onclick="show('id2');"> Encrypt Text</button>
 					 <p>
 					 	<div id="id1"  style="display:none">
               {%if documents%}
@@ -31,14 +31,14 @@
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
                   {{ multiple_data_form.as_p }}
-                  <input type="submit" value="Submit"/>
+                  <input type="submit" class="btn btn-primary" value="Submit"/>
               </form>
 						</div>
 					 	<div id="id2"  style="display:none">
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
                   {{ text_form.as_p }}
-                  <input type="submit" value="Submit"/>
+                  <input type="submit" class="btn btn-primary" value="Submit"/>
               </form>  
             </div>
 					 </p>

@@ -35,6 +35,10 @@
     visibility: visible;
 }
 
+.dropdown-menu > li > a:hover {
+    background-color: #f3f3f2;
+}
+
 .dropdown:hover .dropdown-menu {
     display: block;
 }
@@ -62,5 +66,17 @@
 }
 
 .profile-buttons {
-    background-color: #325d88;
+    background-color: #3e3f3a;
+}
+
+.profile-buttons:hover {
+    background-color: #666666;
+}
+
+.profile-buttons:select {
+    background-color: #666666;
+}
+
+ul{
+    list-style: none;
 }
