@@ -22,7 +22,8 @@
               {%if documents%}
                 <ul>
                   {% for document in documents %}
-                    <li><a href="{{ document.image.url }}">{{ document.image }}</a></li>
+                    <li><a href="{{ document.FinalImage.url }}">{{ document.FinalImage }}</a></li>
+                    <p>{{ document.Created_on }} UTC<P>
                   {% endfor %}
                 </ul>
               {% else %}
