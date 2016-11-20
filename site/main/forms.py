@@ -5,7 +5,7 @@
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
 
- Last updated on: November 12, 2016
+ Last updated on: November 19, 2016
  Updated by: Alexander Sumner
 """
 
@@ -23,10 +23,6 @@ class SignInForm(forms.Form):
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
 # Added: Gene Ryasnianskiy October 31, 2016
-class ImageForm(forms.Form):
-    carrier = forms.ImageField(label='Carrier file')
-    data_file = forms.FileField(label='Data file')
-
 class TextForm(forms.Form):
     carrier = forms.ImageField()
     text = forms.CharField(widget=forms.Textarea)

@@ -25,8 +25,8 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.edit import FormView
 
 #App Imports
-from .models import stegaImage, stegaExtractedFile, stegaFile, tempFile
-from .forms import RegisterForm, SignInForm, ImageForm, TextForm, TextDecryptForm, ImageDecryptForm, MultipleDataForm
+from .models import stegaImage, stegaExtractedFile, tempFile
+from .forms import RegisterForm, SignInForm, TextForm, TextDecryptForm, ImageDecryptForm, MultipleDataForm
 from . import stega
 
 def index(request):
@@ -83,20 +83,18 @@ def encrypt(request):
 
             #insert the data into the carrier
             stega.inject_file(carrier, datas.file , output)
-            
-            #save the tar file if we want to use it later
-            newdata = stegaFile(uploader=request.user)
-            newdata.file.save(datas.name, datas.file)
 
+            #save the steganographed image to the users database
+            newimage = stegaImage(uploader=request.user)
+            newimage.FinalImage.save(carrier.name, output)
+            newimage.BaseImage.save(carrier.name, carrier)
+            newimage.TarFile.save(datas.name, datas.file)
+            
             #close the file objects and delete the temp tar file
             datas.close()
             data.close()
             os.remove(data.name)
 
-            #save the steganographed image to the users database
-            newimage = stegaImage(uploader=request.user)
-            newimage.image.save(carrier.name, output)
-            
             #return to the page
             return HttpResponseRedirect(reverse('encrypt'))
 

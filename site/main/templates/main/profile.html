@@ -16,16 +16,52 @@
     	 <div class="well profile">
 				 <div class="text-center">
 					 <h2>{{ user.first_name }} {{user.last_name}}</h2>
-					 <button class="btn btn-primary profile-buttons" onclick="show('id1');"> Details </button>
-					 <button class="btn btn-primary profile-buttons" onclick="show('id2');"> Archive </button>
-					 <button class="btn btn-primary profile-buttons" onclick="show('id3');"> Settings </button>
+					 <button class="btn btn-primary" onclick="show('id1');"> Details </button>
+					 <button id="archive" class="btn btn-primary" onclick="show('id2');"> Archive </button>
+					 <button id="settings" class="btn btn-primary"> Settings </button>
 
 					 <p>
 					 	<div id="id1"  style="display:none">
 							<h4>Account Email:	{{user.email}}</h4>
 						</div>
-					 	<div id="id2"  style="display:none">text 2</div>
-					 	<div id="id3"  style="display:none">text 3</div>
+					 	<div id="id2"  style="display:none">
+							<table class="table table-striped table-hover ">
+							  <thead>
+							    <tr> 
+							      <th>Processing Date</th>
+							      <th>Job Name</th>
+							      <th>Action</th>
+							    </tr>
+							  </thead>
+							  <tbody>
+							    <tr>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							    </tr>
+							    <tr>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							    </tr>
+							    <tr>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							    </tr>
+							    <tr>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							    </tr>
+							    <tr>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							      <td>Column content</td>
+							    </tr>
+							  </tbody>
+							</table> 
+					 	</div>
 					 </p>
 				 </div>
     	 </div>
@@ -40,9 +76,11 @@
 		function show(elementId) {
 		 document.getElementById("id1").style.display="none";
 		 document.getElementById("id2").style.display="none";
-		 document.getElementById("id3").style.display="none";
 		 document.getElementById(elementId).style.display="block";
 		}
+
+
+
 		</script>
     {% endblock %}
 <!-- end script block -->

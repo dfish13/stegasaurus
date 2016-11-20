@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 
-Last updated on: October 31th, 2016
-Updated by: Gene Ryasnianskiy
+Last updated on: Novmber 19th, 2016
+Updated by: Deborah Venuti
 """
 
 import os
@@ -28,7 +28,7 @@ SECRET_KEY = 'hglei@e%6+ip*p3s$*65jz@w8%3zb+)_a_*iw@y^8@@774=1n0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition

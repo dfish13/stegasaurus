@@ -15,21 +15,21 @@
     	 <div class="well profile">
 				 <div class="text-center">
 					 <h2>Decrypt Here</h2>
-           <button class="btn btn-primary profile-buttons" onclick="show('id1');"> Decrypt File</button>
-					 <button class="btn btn-primary profile-buttons" onclick="show('id2');"> Decrypt Text</button>
+           <button class="btn btn-primary" onclick="show('id1');"> Decrypt File</button>
+					 <button class="btn btn-primary" onclick="show('id2');"> Decrypt Text</button>
 					 <p>
 					 	<div id="id1"  style="display:none">
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
                   {{ image_decrypt_form.as_p }}
-                  <input type="submit" value="Submit"/>
+                  <input type="submit" class="btn btn-primary" value="Submit"/>
               </form>
 						</div>
 					 	<div id="id2"  style="display:none">
               <form enctype="multipart/form-data" method="post">
                   {%  csrf_token %}
                   {{ text_decrypt_form.as_p }}
-                  <input type="submit" value="Submit"/>
+                  <input type="submit" class="btn btn-primary" value="Submit"/>
               </form>  
               <p>{{ text_decrypt_form.message }}</p> 
             </div>
