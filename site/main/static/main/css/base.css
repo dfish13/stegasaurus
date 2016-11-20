@@ -13,7 +13,16 @@
 a,
 a:focus,
 a:hover {
-  color: #174417;
+  text-decoration: none;
+  color: #fff;
+}
+.other-link > a,
+.other-link > a:focus
+{
+  color: #324d32;
+}
+.other-link > a:hover{
+  text-decoration: underline;
 }
 
 /* Custom default primary button */

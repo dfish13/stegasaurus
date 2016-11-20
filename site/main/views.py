@@ -37,7 +37,7 @@ def about(request):
     return render(request, 'main/about.html', {'title': title})
 
 # Deborah Venuti added login_required decorator
-@login_required(login_url='main/signin.html')
+@login_required(login_url='/signin')
 def profile(request):
     title = 'Profile'
     return render(request, 'main/profile.html', {'title': title})
@@ -45,7 +45,7 @@ def profile(request):
 # Deborah Venuti added this
 # Gene Ryasnianskiy image upload and processing
 # Alex Sumner modified to accept multiple images and tar them 
-@login_required(login_url='main/signin.html')
+@login_required(login_url='/signin')
 def encrypt(request):
     title = 'Encrypt'
 
@@ -138,7 +138,7 @@ def encrypt(request):
 
 
 #Alexander Sumner - tab for decrypting images 
-@login_required(login_url='main/signin.html')
+@login_required(login_url='/signin')
 def decrypt(request):
     title = 'Decrypt'
 
