@@ -1,4 +1,4 @@
-<!--
+ <!--
  This file was created on November 3rd, 2016
  by Alexander Sumner
 
@@ -13,28 +13,40 @@
     <div class="inner cover">
         <div class="col-md-3 col-centered"></div>
             <div class="col-md-12 col-centered well">
-              <div class="text-center">
-                 <h2>Decrypt Here</h2>
-                 <button class="btn btn-primary" onclick="show('id1');"> Decrypt File</button>
-                 <button class="btn btn-primary" onclick="show('id2');"> Decrypt Text</button>
-                 <p>
-                  <div id="id1"  style="display:none">
-                    <form enctype="multipart/form-data" method="post">
-                        {%  csrf_token %}
-                        {{ image_decrypt_form.as_p }}
-                        <input type="submit" class="btn btn-primary" value="Submit"/>
-                    </form>
-                  </div>
-                  <div id="id2"  style="display:none">
-                    <form enctype="multipart/form-data" method="post">
-                        {%  csrf_token %}
-                        {{ text_decrypt_form.as_p }}
-                        <input type="submit" class="btn btn-primary" value="Submit"/>
-                    </form>  
-                    <p>{{ text_decrypt_form.message }}</p> 
-                  </div>
-                 </p>
-              </div>
+                <div class="text-center">
+                     <h2>Decrypt Here</h2>
+                     <button class="btn btn-primary" onclick="show('id1');"> Decrypt File</button>
+                     <button class="btn btn-primary" onclick="show('id2');"> Decrypt Text</button>
+                </div>
+                </br>
+                <p>
+                    <div id="id1"  style="display:none">
+                        <form enctype="multipart/form-data" method="post">
+                            <div class="form-container">
+                                {%  csrf_token %}
+                                {{ image_decrypt_form.as_p }}
+                            </div>
+                            <div class="text-center">
+                                <input type="submit" class="btn btn-primary" value="Submit"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="id2"  style="display:none">
+                        <div class="form-container">
+                            <label>Decrypted Text:</label>
+                            <p>{{ text_decrypt_form.message }}</p>
+                        </div>
+                        <form enctype="multipart/form-data" method="post">
+                            <div class="form-container">
+                                {%  csrf_token %}
+                                {{ text_decrypt_form.as_p }}
+                            </div>
+                            <div class="text-center">
+                                <input type="submit" class="btn btn-primary" value="Submit"/>
+                            </div>
+                        </form>  
+                    </div>
+                </p>
             </div>
         </div>
     </div>

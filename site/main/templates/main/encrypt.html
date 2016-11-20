@@ -20,29 +20,52 @@
               </div>
                  <p>
                   <div id="id1"  style="display:none">
-                    {%if documents%}
+                    {% if documents %}
+                    <div class="text-center">
                       <ul>
                         {% for document in documents %}
-                          <li><a href="{{ document.FinalImage.url }}">{{ document.FinalImage }}</a></li>
+                          <li>
+                            <div class="other-link">
+                              <a href="{{ document.FinalImage.url }}">{{ document.FinalImage }}</a>
+                            </div>
+                          </li>
                           <p>{{ document.Created_on }} UTC<P>
                         {% endfor %}
                       </ul>
+                    </div>
                     {% else %}
                     <div class="text-center">
                         <p>No documents.</p>
+                        </br>
                     </div>
                     {% endif %}
-                    <form enctype="multipart/form-data" method="post">
-                        {%  csrf_token %}
-                        {{ multiple_data_form.as_p }}
-                        <input type="submit" class="btn btn-primary" value="Submit"/>
-                    </form>
+                      <form enctype="multipart/form-data" method="post">
+                        <div class="form-container">
+                          {%  csrf_token %}
+                          {{ multiple_data_form.as_p }}
+                        </div>
+                        <div class="text-center">
+                          <input type="submit" class="btn btn-primary" value="Submit"/>
+                        </div>
+                      </form>
                   </div>
+
                   <div id="id2"  style="display:none">
                     <form enctype="multipart/form-data" method="post">
+                      <div class="form-container">
                         {%  csrf_token %}
-                        {{ text_form.as_p }}
+                        <p>
+                          <label for="id_carrier">Carrier:</label>
+                          <input id="id_carrier" name="carrier" type="file" required>
+                        </p>
+                        <p>
+                          <label for="id_text">Text:</label><br>
+                          <textarea cols="30" id="id_text" name="text" rows="5" required></textarea>
+                        </p>
+                      </div>
+                      <div class="text-center">
                         <input type="submit" class="btn btn-primary" value="Submit"/>
+                      </div>
                     </form>  
                   </div>
                  </p>
