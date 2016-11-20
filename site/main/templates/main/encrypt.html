@@ -9,45 +9,47 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-	<div class="row">
-		<div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
-    	 <div class="well profile">
-				 <div class="text-center">
-					 <h2>Encrypt Here</h2>
-           <button class="btn btn-primary" onclick="show('id1');"> Encrypt File</button>
-					 <button class="btn btn-primary" onclick="show('id2');"> Encrypt Text</button>
-					 <p>
-					 	<div id="id1"  style="display:none">
-              {%if documents%}
-                <ul>
-                  {% for document in documents %}
-                    <li><a href="{{ document.FinalImage.url }}">{{ document.FinalImage }}</a></li>
-                    <p>{{ document.Created_on }} UTC<P>
-                  {% endfor %}
-                </ul>
-              {% else %}
-                  <p>No documents.</p>
-              {% endif %}
-              <form enctype="multipart/form-data" method="post">
-                  {%  csrf_token %}
-                  {{ multiple_data_form.as_p }}
-                  <input type="submit" class="btn btn-primary" value="Submit"/>
-              </form>
-						</div>
-					 	<div id="id2"  style="display:none">
-              <form enctype="multipart/form-data" method="post">
-                  {%  csrf_token %}
-                  {{ text_form.as_p }}
-                  <input type="submit" class="btn btn-primary" value="Submit"/>
-              </form>  
+<header id="top" class="header">
+    <div class="inner cover">
+        <div class="col-md-3 col-centered"></div>
+            <div class="col-md-12 col-centered well">
+              <div class="text-center">
+                 <h2>Encrypt Here</h2>
+                 <button class="btn btn-primary" onclick="show('id1');"> Encrypt File</button>
+                 <button class="btn btn-primary" onclick="show('id2');"> Encrypt Text</button>
+              </div>
+                 <p>
+                  <div id="id1"  style="display:none">
+                    {%if documents%}
+                      <ul>
+                        {% for document in documents %}
+                          <li><a href="{{ document.FinalImage.url }}">{{ document.FinalImage }}</a></li>
+                          <p>{{ document.Created_on }} UTC<P>
+                        {% endfor %}
+                      </ul>
+                    {% else %}
+                    <div class="text-center">
+                        <p>No documents.</p>
+                    </div>
+                    {% endif %}
+                    <form enctype="multipart/form-data" method="post">
+                        {%  csrf_token %}
+                        {{ multiple_data_form.as_p }}
+                        <input type="submit" class="btn btn-primary" value="Submit"/>
+                    </form>
+                  </div>
+                  <div id="id2"  style="display:none">
+                    <form enctype="multipart/form-data" method="post">
+                        {%  csrf_token %}
+                        {{ text_form.as_p }}
+                        <input type="submit" class="btn btn-primary" value="Submit"/>
+                    </form>  
+                  </div>
+                 </p>
             </div>
-					 </p>
-				 </div>
-    	 </div>
-		</div>
-	</div>
-</div>
+        </div>
+    </div>
+</header>
 {% endblock %}
 <!-- end body content block -->
 
