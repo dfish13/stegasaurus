@@ -2,8 +2,8 @@
  This file was created on October 15th, 2016
  by Deborah Venuti and James Riley
 
- Last updated on: November 16th, 2016
- Updated by: Deborah Venuti
+ Last updated on: November 20th, 2016
+ Updated by: James Riley
 """
 
 from django.conf.urls import url
