@@ -11,38 +11,39 @@
 <!-- form built out by Deborah Venuti -->
 <!-- begin body content block -->
 {% block content %}
-<div class="container">   
-    <div class="col-md-3 col-centered"></div>
-        <div class="col-md-6 col-centered well">
-            {% if invalid %}
-                <p class="error-msg">Incorrect email and/or password. Try again or register as a new user.</p>
-            {% endif %}
-            <form class="form-horizontal" role='form' action='/signin' method='POST'>{% csrf_token %}
-                 <fieldset>
-                    <div class="form-group">
-                      <label for="email" class="col-lg-2 control-label">{{ form.email.label }}</label>
-                      <div class="col-lg-10">
-                        <input id="email" type="email" name="email" maxlength="150" required class="form-control"/>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="password" class="col-lg-2 control-label">{{ form.password.label }}</label>
-                      <div class="col-lg-10">
-                        <input id="password" type="password" name="password" maxlength="32" required class="form-control"/>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-lg-10 col-lg-offset-2">
-                        <button type="submit" class="btn btn-primary">Sign In</button>
-                      </div>
-                    </div>
-                  </fieldset>
-            </form>
-            <a href="/register/"> New user? Click here to register. </a> 
-        </div>
+<header id="top" class="header">
+    <div class="inner cover">
         <div class="col-md-3 col-centered"></div>
+            <div class="col-md-6 col-centered well">
+                {% if invalid %}
+                    <p class="error-msg">Incorrect email and/or password. Try again or register as a new user.</p>
+                {% endif %}
+                <form class="form-horizontal" role='form' action='/signin' method='POST'>{% csrf_token %}
+                     <fieldset>
+                        <div class="form-group">
+                          <label for="email" class="col-lg-2 control-label">{{ form.email.label }}</label>
+                          <div class="col-lg-10">
+                            <input id="email" type="email" name="email" maxlength="150" required class="form-control"/>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="password" class="col-lg-2 control-label">{{ form.password.label }}</label>
+                          <div class="col-lg-10">
+                            <input id="password" type="password" name="password" maxlength="32" required class="form-control"/>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                          </div>
+                        </div>
+                      </fieldset>
+                </form>
+                <div class="other-link"><a href="/register"> New user? Click here to register. </a></div> 
+            </div>
+        </div>
     </div>
-</div>
+</header>
 {% endblock %}
 <!-- end body content block -->
 
