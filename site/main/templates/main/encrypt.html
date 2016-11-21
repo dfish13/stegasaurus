@@ -2,8 +2,10 @@
  This file was created on October 28th, 2016
  by Deborah Venuti
 
- Last updated on: November 3, 2016
- Updated by: Alexander Sumner
+ Contributors: Alexander Sumner
+
+ Last updated on: November 20, 2016
+ Updated by: Gene Ryasnianskiy
 -->
 {% extends 'main/base.html' %}
 {% load static %}
@@ -20,25 +22,6 @@
               </div>
                  <p>
                   <div id="id1"  style="display:none">
-                    {% if documents %}
-                    <div class="text-center">
-                      <ul>
-                        {% for document in documents %}
-                          <li>
-                            <div class="other-link">
-                              <a href="{{ document.FinalImage.url }}">{{ document.FinalImage }}</a>
-                            </div>
-                          </li>
-                          <p>{{ document.Created_on }} UTC<P>
-                        {% endfor %}
-                      </ul>
-                    </div>
-                    {% else %}
-                    <div class="text-center">
-                        <p>No documents.</p>
-                        </br>
-                    </div>
-                    {% endif %}
                       <form enctype="multipart/form-data" method="post">
                         <div class="form-container">
                           {%  csrf_token %}

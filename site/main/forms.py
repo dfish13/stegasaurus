@@ -5,8 +5,8 @@
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
 
- Last updated on: November 19, 2016
- Updated by: Alexander Sumner
+ Last updated on: November 20, 2016
+ Updated by: Gene Ryasnianskiy
 """
 
 from django import forms
@@ -38,3 +38,10 @@ class ImageDecryptForm(forms.Form):
 class MultipleDataForm(forms.Form):
     carrier = forms.ImageField(label='Carrier File')
     Files = MultiFileField(label='Data Files')
+
+#Added: Gene Ryasnianskiy November 20, 2016
+class DeleteFileForm(forms.Form):
+    delete = forms.MultipleChoiceField(
+        #choices = LIST_OF_VALID_CHOICES,
+        widget  = forms.CheckboxSelectMultiple,
+    )
