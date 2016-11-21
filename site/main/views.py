@@ -111,7 +111,8 @@ def encrypt(request):
             
             #save the steganographed image into the users database
             new = stegaImage(uploader=request.user)
-            new.image.save(carrier.name, output)
+            new.FinalImage.save(carrier.name, output)
+            new.BaseImage.save(carrier.name, carrier)
             
             #return to the page
             return HttpResponseRedirect(reverse('encrypt'))
