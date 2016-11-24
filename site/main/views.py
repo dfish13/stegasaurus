@@ -109,10 +109,11 @@ def encrypt(request):
                 newfile = tempFile(uploader=request.user)
                 newfile.file.save(each.name, each)
                 tFile.add(("./static" + newfile.file.url), arcname=each.name)
+                os.remove(os.path.join(MEDIA_ROOT, newfile.file.name))
+                newfile.delete()
             
-            #close the tar file and clean out temp data
+            #close the tar file
             tFile.close()
-            tempFile.objects.all().delete()
             
             #open file opject to grab the tar file
             data = open('Data.tar', mode = 'r+b')
@@ -122,7 +123,7 @@ def encrypt(request):
             stega.inject_file(carrier, datas.file , output)
 
             #save the steganographed image to the users database
-            newimage = stegaImage(uploader=request.user, processType='File')
+            newimage = stegaImage(uploader=request.user, processType='Encrypt File')
             newimage.FinalImage.save(carrier.name, output)
             newimage.BaseImage.save(carrier.name, carrier)
             newimage.TarFile.save(datas.name, datas.file)
@@ -147,7 +148,7 @@ def encrypt(request):
             stega.inject_text(carrier, text , output)
             
             #save the steganographed image into the users database
-            new = stegaImage(uploader=request.user, processType='Text')
+            new = stegaImage(uploader=request.user, processType='Encrypt Text')
             new.FinalImage.save(carrier.name, output)
             new.BaseImage.save(carrier.name, carrier)
             
@@ -199,8 +200,9 @@ def decrypt(request):
             stega.extract_file(carrier, output)
             
             #save the extracted file to the users database
-            new = stegaExtractedFile(uploader=request.user)
-            new.file.save(carrier.name, output)
+            new = stegaImage(uploader=request.user, processType='Decrypt File')
+            new.BaseImage.save(carrier.name, carrier)
+            new.TarFile.save('Data.tar', output)
             
             return HttpResponseRedirect(reverse('decrypt'))
     
