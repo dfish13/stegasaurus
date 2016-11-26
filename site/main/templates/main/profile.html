@@ -43,9 +43,15 @@
                                         <tr>
                                           <td>{{ files.Created_on }} UTC</td>
                                           <td>{{ files.processType }}</td>
-                                          <td> <span class="other-link">
-                                              <a href="{{ files.FinalImage.url }}">{{ files.FinalImage }}</a>
-                                          </span> </td>
+                                          {% if files.processType == 'Decrypt File'%}
+                                            <td> <span class="other-link">
+                                              <a href="{{ files.TarFile.url }}">{{ files.TarFile }}</a>
+                                            </span> </td>
+                                          {% else %}
+                                            <td> <span class="other-link">
+                                                <a href="{{ files.FinalImage.url }}">{{ files.FinalImage }}</a>
+                                            </span> </td>                                        
+                                          {% endif %}
                                           <td><input  id="id_delete" name="delete" type="checkbox" value="{{files.id}}" name="choices"></td>
                                         </tr>  
                                     {% endfor %}
