@@ -5,8 +5,8 @@
  Contributors: Deborah Venuti, Bethany Sanders,
   James Riley, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 20, 2016
-Updated by: Gene Ryasnianskiy
+Last updated on: November 29, 2016
+Updated by: Deborah Venuti
 """
 
 #Python Imports
@@ -256,6 +256,8 @@ def register(request):
 
             try:
                 user = User.objects.get(username=formData['email'])
+                if (user is not None):
+                    return render(request, 'main/register.html', {'form':form, 'invalid': True})
 
             except User.DoesNotExist:
                 user = User.objects.create_user(formData['email'], formData['email'], formData['password'], first_name=formData['first_name'], last_name=formData['last_name'])
@@ -265,5 +267,4 @@ def register(request):
 
     else:
         form = RegisterForm()
-
     return render(request, 'main/register.html', {'form': form, 'title':title})
