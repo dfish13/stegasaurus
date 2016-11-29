@@ -2,7 +2,7 @@
  This file was created on October 15th, 2016
  by Deborah Venuti and Bethany Sanders
 
- Last updated on: October 28th, 2016
+ Last updated on: November 29, 2016
  Updated by: Deborah Venuti
 -->
 {% extends 'main/base.html' %}
@@ -15,6 +15,9 @@
     <div class="inner cover">
         <div class="col-md-3 col-centered"></div>
             <div class="col-md-6 col-centered well">
+                {% if invalid %}
+                    <p class="error-msg">That email is already in use. Sign in or provide a different email.</p>
+                {% endif %}
                 <form class="form-horizontal" role='form' action='/register' method='POST'>{% csrf_token %}
                    <fieldset>
                       <div class="form-group">
@@ -32,7 +35,7 @@
                       <div class="form-group">
                         <label for="email" class="col-lg-2 control-label">{{ form.email.label }}</label>
                         <div class="col-lg-10">
-                          <input id="email" type="text" name="email" maxlength="150" required class="form-control"/>
+                          <input id="email" type="email" name="email" maxlength="150" required class="form-control"/>
                         </div>
                       </div>
                       <div class="form-group">
