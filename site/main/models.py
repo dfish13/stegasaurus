@@ -4,8 +4,8 @@
 
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 19, 2016
-Updated by: Alexander Sumner
+Last updated on: November 20, 2016
+Updated by: Gene Ryasnianskiy
 """
 
 from django.db import models
@@ -23,6 +23,7 @@ class stegaImage(models.Model):
     BaseImage = models.ImageField(upload_to=user_directory_path)
     TarFile = models.FileField(upload_to=user_directory_path)
     Created_on = models.DateTimeField(default = datetime.now)
+    processType = models.CharField(max_length=256, default = 'Legacy')
       
 #Alexander Sumner added extracted file model
 class stegaExtractedFile(models.Model):

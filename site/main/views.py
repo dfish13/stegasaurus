@@ -5,8 +5,8 @@
  Contributors: Deborah Venuti, Bethany Sanders,
   James Riley, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 12, 2016
-Updated by: Alexander Sumner
+Last updated on: November 20, 2016
+Updated by: Gene Ryasnianskiy
 """
 
 #Python Imports
@@ -23,10 +23,11 @@ from django.core.files import File
 from django.shortcuts import render, render_to_response, reverse
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import FormView
+from stegasaurus.settings import MEDIA_ROOT 
 
 #App Imports
 from .models import stegaImage, stegaExtractedFile, tempFile
-from .forms import RegisterForm, SignInForm, TextForm, TextDecryptForm, ImageDecryptForm, MultipleDataForm
+from .forms import RegisterForm, SignInForm, TextForm, TextDecryptForm, ImageDecryptForm, MultipleDataForm, DeleteFileForm
 from . import stega
 
 def index(request):
@@ -37,14 +38,50 @@ def about(request):
     return render(request, 'main/about.html', {'title': title})
 
 # Deborah Venuti added login_required decorator
+# Gene Ryasnianskiy added archive display and delete logic
 @login_required(login_url='/signin')
 def profile(request):
     title = 'Profile'
-    return render(request, 'main/profile.html', {'title': title})
+    
+    #Get user's files
+    archiveFiles = stegaImage.objects.all().filter(uploader = request.user)
+    
+    #Form for deleting archive items
+    if (request.method == 'POST'):
+        delete_file_form = DeleteFileForm(request.POST)
+        
+        #Delete each item and each file by ID
+        for itemID in request.POST.getlist('delete'):
+            objToDelete = stegaImage.objects.get(id=itemID)
+            try:
+                os.remove(os.path.join(MEDIA_ROOT, objToDelete.FinalImage.name))
+            except:
+                pass
+            try:
+                os.remove(os.path.join(MEDIA_ROOT, objToDelete.BaseImage.name))
+            except:
+                pass
+            try:
+                os.remove(os.path.join(MEDIA_ROOT, objToDelete.TarFile.name))
+            except:
+                pass
+            objToDelete.delete()
+    
+    else:
+        delete_file_form = DeleteFileForm()
+        
+    context = {
+        'title': title,
+        'archive': archiveFiles,
+        'delete_file_form': delete_file_form,
+        }
+    
+    return render(request, 'main/profile.html', context)
 
 # Deborah Venuti added this
 # Gene Ryasnianskiy image upload and processing
-# Alex Sumner modified to accept multiple images and tar them
+# Alex Sumner modified to accept multiple images and tar them 
+# Gene Ryasnaksiy moved documents display to archive in profile view
 @login_required(login_url='/signin')
 def encrypt(request):
     title = 'Encrypt'
@@ -72,11 +109,12 @@ def encrypt(request):
                 newfile = tempFile(uploader=request.user)
                 newfile.file.save(each.name, each)
                 tFile.add(("./static" + newfile.file.url), arcname=each.name)
-
-            #close the tar file and clean out temp data
+                os.remove(os.path.join(MEDIA_ROOT, newfile.file.name))
+                newfile.delete()
+            
+            #close the tar file
             tFile.close()
-            tempFile.objects.all().delete()
-
+            
             #open file opject to grab the tar file
             data = open('Data.tar', mode = 'r+b')
             datas = File(data)
@@ -85,7 +123,7 @@ def encrypt(request):
             stega.inject_file(carrier, datas.file , output)
 
             #save the steganographed image to the users database
-            newimage = stegaImage(uploader=request.user)
+            newimage = stegaImage(uploader=request.user, processType='Encrypt File')
             newimage.FinalImage.save(carrier.name, output)
             newimage.BaseImage.save(carrier.name, carrier)
             newimage.TarFile.save(datas.name, datas.file)
@@ -110,7 +148,7 @@ def encrypt(request):
             stega.inject_text(carrier, text , output)
 
             #save the steganographed image into the users database
-            new = stegaImage(uploader=request.user)
+            new = stegaImage(uploader=request.user, processType='Encrypt Text')
             new.FinalImage.save(carrier.name, output)
             new.BaseImage.save(carrier.name, carrier)
 
@@ -122,13 +160,8 @@ def encrypt(request):
         multiple_data_form = MultipleDataForm()
         text_form = TextForm()
 
-
-    # Load documents for the list page
-    documents = stegaImage.objects.all().filter(uploader = request.user)
-
     #create list of information to send over the the .html file
     context = {
-        'documents': documents,
         'multiple_data_form': multiple_data_form,
         'text_form': text_form,
         'title': title,
@@ -167,9 +200,10 @@ def decrypt(request):
             stega.extract_file(carrier, output)
 
             #save the extracted file to the users database
-            new = stegaExtractedFile(uploader=request.user)
-            new.file.save(carrier.name, output)
-
+            new = stegaImage(uploader=request.user, processType='Decrypt File')
+            new.BaseImage.save(carrier.name, carrier)
+            new.TarFile.save('Data.tar', output)
+            
             return HttpResponseRedirect(reverse('decrypt'))
 
     else:
