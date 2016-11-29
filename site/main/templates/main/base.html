@@ -41,7 +41,7 @@
                             <li {% if request.path == "/profile" %}class="active"{% endif %}><a href="/profile">Profile</a></li>
                             <li {% if request.path == "/encrypt" %}class="active"{% endif %}><a href="/encrypt">Encrypt</a></li>
                             <li {% if request.path == "/decrypt" %}class="active"{% endif %}><a href="/decrypt">Decrypt</a></li>
-                            <li><a href="signout">Sign Out</a></li>
+                            <li><a href="/signout">Sign Out</a></li>
                         </ul>
                     </nav>
                     {% else %}
@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        
+
 
 
 
@@ -71,6 +71,6 @@
             {% block javascript %}
             {% endblock %}
         <!-- end script block -->
-    
+
     </body>
 </html>
