@@ -44,7 +44,7 @@ def profile(request):
 
 # Deborah Venuti added this
 # Gene Ryasnianskiy image upload and processing
-# Alex Sumner modified to accept multiple images and tar them 
+# Alex Sumner modified to accept multiple images and tar them
 @login_required(login_url='/signin')
 def encrypt(request):
     title = 'Encrypt'
@@ -53,30 +53,30 @@ def encrypt(request):
     #print(userObject
     # Handle file upload
     if request.method == 'POST':
-        
+
         #create form objects
         multiple_data_form = MultipleDataForm(request.POST, request.FILES)
         text_form = TextForm(request.POST, request.FILES)
 
-        
+
         #form for gathering files and inserting them into a carrier
         if multiple_data_form.is_valid():
-            
+
             #grab the information from the submitted form
             output = ContentFile(bytes(0))
             carrier = multiple_data_form.cleaned_data['carrier']
             tFile = tarfile.open("Data.tar", 'w')
-            
+
             #temporarily store the files to facilitate taring them later
             for each in multiple_data_form.cleaned_data['Files']:
                 newfile = tempFile(uploader=request.user)
                 newfile.file.save(each.name, each)
                 tFile.add(("./static" + newfile.file.url), arcname=each.name)
-            
+
             #close the tar file and clean out temp data
             tFile.close()
             tempFile.objects.all().delete()
-            
+
             #open file opject to grab the tar file
             data = open('Data.tar', mode = 'r+b')
             datas = File(data)
@@ -89,7 +89,7 @@ def encrypt(request):
             newimage.FinalImage.save(carrier.name, output)
             newimage.BaseImage.save(carrier.name, carrier)
             newimage.TarFile.save(datas.name, datas.file)
-            
+
             #close the file objects and delete the temp tar file
             datas.close()
             data.close()
@@ -100,20 +100,20 @@ def encrypt(request):
 
         #form for text insertion
         if text_form.is_valid():
-            
+
             #grab information from the submitted form
             output = ContentFile(bytes(0))
             carrier = text_form.cleaned_data['carrier']
             text = text_form.cleaned_data['text']
-            
+
             #inject the text into the image
             stega.inject_text(carrier, text , output)
-            
+
             #save the steganographed image into the users database
             new = stegaImage(uploader=request.user)
             new.FinalImage.save(carrier.name, output)
             new.BaseImage.save(carrier.name, carrier)
-            
+
             #return to the page
             return HttpResponseRedirect(reverse('encrypt'))
 
@@ -133,12 +133,12 @@ def encrypt(request):
         'text_form': text_form,
         'title': title,
         }
-    
+
     #load the page
     return render(request, 'main/encrypt.html', context)
 
 
-#Alexander Sumner - tab for decrypting images 
+#Alexander Sumner - tab for decrypting images
 @login_required(login_url='/signin')
 def decrypt(request):
     title = 'Decrypt'
@@ -147,7 +147,7 @@ def decrypt(request):
     userObject = User.objects.get(username = request.user.username)
 
     if (request.method == 'POST'):
-        
+
         #create form objects
         text_decrypt_form = TextDecryptForm(request.POST, request.FILES)
         image_decrypt_form = ImageDecryptForm(request.POST, request.FILES)
@@ -162,16 +162,16 @@ def decrypt(request):
         if image_decrypt_form.is_valid():
             output = ContentFile(bytes(0))
             carrier = image_decrypt_form.cleaned_data['carrier']
-            
+
             #extracting is currently in development
             stega.extract_file(carrier, output)
-            
+
             #save the extracted file to the users database
             new = stegaExtractedFile(uploader=request.user)
             new.file.save(carrier.name, output)
-            
+
             return HttpResponseRedirect(reverse('decrypt'))
-    
+
     else:
         text_decrypt_form = TextDecryptForm()
         image_decrypt_form = ImageDecryptForm()
