@@ -5,8 +5,8 @@
  Contributors: Deborah Venuti, Bethany Sanders,
   James Riley, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 20, 2016
-Updated by: Gene Ryasnianskiy
+Last updated on: November 29, 2016
+Updated by: Deborah Venuti
 """
 
 #Python Imports
@@ -90,20 +90,20 @@ def encrypt(request):
     #print(userObject
     # Handle file upload
     if request.method == 'POST':
-        
+
         #create form objects
         multiple_data_form = MultipleDataForm(request.POST, request.FILES)
         text_form = TextForm(request.POST, request.FILES)
 
-        
+
         #form for gathering files and inserting them into a carrier
         if multiple_data_form.is_valid():
-            
+
             #grab the information from the submitted form
             output = ContentFile(bytes(0))
             carrier = multiple_data_form.cleaned_data['carrier']
             tFile = tarfile.open("Data.tar", 'w')
-            
+
             #temporarily store the files to facilitate taring them later
             for each in multiple_data_form.cleaned_data['Files']:
                 newfile = tempFile(uploader=request.user)
@@ -127,7 +127,7 @@ def encrypt(request):
             newimage.FinalImage.save(carrier.name, output)
             newimage.BaseImage.save(carrier.name, carrier)
             newimage.TarFile.save(datas.name, datas.file)
-            
+
             #close the file objects and delete the temp tar file
             datas.close()
             data.close()
@@ -138,20 +138,20 @@ def encrypt(request):
 
         #form for text insertion
         if text_form.is_valid():
-            
+
             #grab information from the submitted form
             output = ContentFile(bytes(0))
             carrier = text_form.cleaned_data['carrier']
             text = text_form.cleaned_data['text']
-            
+
             #inject the text into the image
             stega.inject_text(carrier, text , output)
-            
+
             #save the steganographed image into the users database
             new = stegaImage(uploader=request.user, processType='Encrypt Text')
             new.FinalImage.save(carrier.name, output)
             new.BaseImage.save(carrier.name, carrier)
-            
+
             #return to the page
             return HttpResponseRedirect(reverse('encrypt'))
 
@@ -166,12 +166,12 @@ def encrypt(request):
         'text_form': text_form,
         'title': title,
         }
-    
+
     #load the page
     return render(request, 'main/encrypt.html', context)
 
 
-#Alexander Sumner - tab for decrypting images 
+#Alexander Sumner - tab for decrypting images
 @login_required(login_url='/signin')
 def decrypt(request):
     title = 'Decrypt'
@@ -180,7 +180,7 @@ def decrypt(request):
     userObject = User.objects.get(username = request.user.username)
 
     if (request.method == 'POST'):
-        
+
         #create form objects
         text_decrypt_form = TextDecryptForm(request.POST, request.FILES)
         image_decrypt_form = ImageDecryptForm(request.POST, request.FILES)
@@ -195,17 +195,17 @@ def decrypt(request):
         if image_decrypt_form.is_valid():
             output = ContentFile(bytes(0))
             carrier = image_decrypt_form.cleaned_data['carrier']
-            
+
             #extracting is currently in development
             stega.extract_file(carrier, output)
-            
+
             #save the extracted file to the users database
             new = stegaImage(uploader=request.user, processType='Decrypt File')
             new.BaseImage.save(carrier.name, carrier)
             new.TarFile.save('Data.tar', output)
             
             return HttpResponseRedirect(reverse('decrypt'))
-    
+
     else:
         text_decrypt_form = TextDecryptForm()
         image_decrypt_form = ImageDecryptForm()
@@ -256,6 +256,8 @@ def register(request):
 
             try:
                 user = User.objects.get(username=formData['email'])
+                if (user is not None):
+                    return render(request, 'main/register.html', {'form':form, 'invalid': True})
 
             except User.DoesNotExist:
                 user = User.objects.create_user(formData['email'], formData['email'], formData['password'], first_name=formData['first_name'], last_name=formData['last_name'])
@@ -265,5 +267,4 @@ def register(request):
 
     else:
         form = RegisterForm()
-
     return render(request, 'main/register.html', {'form': form, 'title':title})
