@@ -27,13 +27,16 @@ class TextForm(forms.Form):
     carrier = forms.ImageField()
     text = forms.CharField(widget=forms.Textarea)
 
-class TextDecryptForm(forms.Form):
+class DecryptForm(forms.Form):
+    TEXT = 'T'
+    FILE = 'F'
     carrier = forms.ImageField(label='Encrypted Image')
-    message = ''
-
-# Added: Alexander Sumner November 3, 2016
-class ImageDecryptForm(forms.Form):
-    carrier = forms.ImageField(label='Encrypted Image')
+    choice = forms.ChoiceField(
+        choices = (
+            (TEXT, 'Decrypt Text'),
+            (FILE, 'Decrypt File')
+            )
+        )
 
 class MultipleDataForm(forms.Form):
     carrier = forms.ImageField(label='Carrier File')
