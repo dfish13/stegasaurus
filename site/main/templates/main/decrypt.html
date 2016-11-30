@@ -15,21 +15,18 @@
             <div class="col-md-12 col-centered well">
                 <div class="text-center">
                      <h2>Decrypt Here</h2>
-                     <button class="btn btn-primary" onclick="show('id1');"> Decrypt File</button>
                 </div>
                 <p>
-                    <div id="id1"  style="display:none">
-                        <form enctype="multipart/form-data" method="post">
-                            <div class="form-container">
-                                {%  csrf_token %}
-                                {{ decrypt_form.as_p }}
-                            </div>
-                            <div class="text-center">
-                                <input type="submit" class="btn btn-primary" value="Submit"/>
-                            </div>
-                            <p>{{ message }}</p>
-                        </form>
-                    </div>
+                    <form enctype="multipart/form-data" method="post">
+                        <div class="form-container">
+                            {%  csrf_token %}
+                            {{ decrypt_form.as_p }}
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Submit"/>
+                        </div>
+                        <p>{{ message }}</p>
+                    </form>
                 </p>
             </div>
         </div>
@@ -40,11 +37,5 @@
 
 <!-- begin script  block -->
     {% block javascript %}
-    <script type="text/javascript">
-    function show(elementId) {
-     document.getElementById("id1").style.display="none";
-     document.getElementById(elementId).style.display="block";
-    }
-    </script>
     {% endblock %}
 <!-- end script block -->
