@@ -23,6 +23,11 @@
                  <p>
                   <div id="id1"  style="display:none">
                       <form enctype="multipart/form-data" method="post">
+                      {% if file_invalid %}
+                        <div class="text-center">
+                          <p class="error-msg"> Carrier image is too small to hold the data. Upload a larger carrier image.</p>
+                        </div>
+                      {% endif %}
                         <div class="form-container">
                           {%  csrf_token %}
                           {{ multiple_data_form.as_p }}
@@ -35,6 +40,11 @@
 
                   <div id="id2"  style="display:none">
                     <form enctype="multipart/form-data" method="post">
+                      {% if text_invalid %}
+                        <div class="text-center">
+                          <p class="error-msg"> Carrier image is too small to hold the data. Upload a larger carrier image.</p>
+                        </div>
+                      {% endif %}
                       <div class="form-container">
                         {%  csrf_token %}
                         <p>

@@ -87,6 +87,8 @@ def encrypt(request):
     title = 'Encrypt'
 
     userObject = User.objects.get(username = request.user.username)
+    text_invalid = False
+    file_invalid = False
 
     # Handle file upload
     if request.method == 'POST':
@@ -120,21 +122,28 @@ def encrypt(request):
             datas = File(data)
 
             #insert the data into the carrier
-            stega.inject_file(carrier, datas.file , output)
+            try:
+                stega.inject_file(carrier, datas.file , output)
+                #save the steganographed image to the users database
+                newimage = stegaImage(uploader=request.user, processType='Encrypt File')
+                newimage.FinalImage.save(carrier.name, output)
+                newimage.BaseImage.save(carrier.name, carrier)
+                newimage.TarFile.save(datas.name, datas.file)
 
-            #save the steganographed image to the users database
-            newimage = stegaImage(uploader=request.user, processType='Encrypt File')
-            newimage.FinalImage.save(carrier.name, output)
-            newimage.BaseImage.save(carrier.name, carrier)
-            newimage.TarFile.save(datas.name, datas.file)
+                #close the file objects and delete the temp tar file
+                datas.close()
+                data.close()
+                os.remove(data.name)
+                #return to the page
+                return HttpResponseRedirect(reverse('encrypt'))
 
-            #close the file objects and delete the temp tar file
-            datas.close()
-            data.close()
-            os.remove(data.name)
+            except stega.ByteOperationError as e:
+                file_invalid = True
 
-            #return to the page
-            return HttpResponseRedirect(reverse('encrypt'))
+
+            
+
+            
 
         #form for text insertion
         if text_form.is_valid():
@@ -145,15 +154,20 @@ def encrypt(request):
             text = text_form.cleaned_data['text']
 
             #inject the text into the image
-            stega.inject_text(carrier, text , output)
+            try:
+                stega.inject_text(carrier, text , output)
+                #save the steganographed image into the users database
+                new = stegaImage(uploader=request.user, processType='Encrypt Text')
+                new.FinalImage.save(carrier.name, output)
+                new.BaseImage.save(carrier.name, carrier)
+                #return to the page
+                return HttpResponseRedirect(reverse('encrypt'))
+            except stega.ByteOperationError as e:
+                invalid = True
 
-            #save the steganographed image into the users database
-            new = stegaImage(uploader=request.user, processType='Encrypt Text')
-            new.FinalImage.save(carrier.name, output)
-            new.BaseImage.save(carrier.name, carrier)
+            
 
-            #return to the page
-            return HttpResponseRedirect(reverse('encrypt'))
+            
 
     else:
         #set defaults for when no data has been submitted
@@ -165,6 +179,8 @@ def encrypt(request):
         'multiple_data_form': multiple_data_form,
         'text_form': text_form,
         'title': title,
+        'text_invalid': text_invalid,
+        'file_invalid': file_invalid,
         }
 
     #load the page
