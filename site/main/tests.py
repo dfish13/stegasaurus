@@ -12,6 +12,9 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from . import views
 
+from .forms import MultipleDataForm, DecryptForm, TextForm, DeleteFileForm
+from multiupload.fields import MultiFileField
+from django import forms
 
 #this class mostly tests views
 #should be able to seperately test the views and other
@@ -33,6 +36,8 @@ class TestCalls(TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'main/about.html')
 
+#------------ PROFILE PAGE TESTS -------------
+
 	#test redirect profile access
 	def test_profile_view_invalid(self):
 		self.user = User.objects.create_user(username='test@steg.com', password='testpassword')
@@ -52,6 +57,7 @@ class TestCalls(TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'main/profile.html')
 
+#------------ ENCRYPT PAGE TESTS -------------
 
 	#test encrypt redirect access
 	def test_encrypt_view_invalid(self):
@@ -68,11 +74,34 @@ class TestCalls(TestCase):
 		self.user.save()
 
 		self.client.login(username='test@steg.com', password='testpassword')
-		response = self.client.get('/encrypt', follow=True)
+		response = self.client.get('/decrypt', follow=True)
 		self.assertEqual(response.status_code, 200)
-		self.assertTemplateUsed(response, 'main/encrypt.html')
+		self.assertTemplateUsed(response, 'main/decrypt.html')
 
 
+#------------ DECRYPT PAGE TESTS -------------
+
+	#test decrypt redirect access
+	def test_decrypt_view_invalid(self):
+		self.user = User.objects.create_user(username='test@steg.com', password='testpassword')
+		self.user.save()
+
+		self.client.login(username='fake@steg.com', userpassword='fake')
+		response = self.client.get('/decrypt', follow=False)
+		self.assertEqual(response.status_code, 302)
+
+	#test decrypt access
+	def test_decrypt_view_valid(self):
+		self.user = User.objects.create_user(username='test@steg.com', password='testpassword')
+		self.user.save()
+
+		self.client.login(username='test@steg.com', password='testpassword')
+		response = self.client.get('/decrypt', follow=True)
+		self.assertEqual(response.status_code, 200)
+		self.assertTemplateUsed(response, 'main/decrypt.html')	
+
+
+#------------ LOGIN PAGE TESTS -------------
 
 	#test signin page
 	def test_signin_view_loads(self):
@@ -101,6 +130,9 @@ class TestCalls(TestCase):
 		response = self.client.post('/signin', {})
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'main/signin.html')
+
+
+#------------ REGISTER PAGE TESTS -------------
 
 	#test register view
 	def test_call_register_view(self):

@@ -5,8 +5,8 @@
  Contributors: Deborah Venuti, Bethany Sanders,
   James Riley, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 29, 2016
-Updated by: Deborah Venuti
+Last updated on: November 30, 2016
+Updated by: Alexander Sumner
 """
 
 #Python Imports
@@ -23,10 +23,10 @@ from django.core.files import File
 from django.shortcuts import render, render_to_response, reverse
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import FormView
-from stegasaurus.settings import MEDIA_ROOT 
+from stegasaurus.settings import MEDIA_ROOT
 
 #App Imports
-from .models import stegaImage, stegaExtractedFile, tempFile
+from .models import stegaImage, tempFile
 from .forms import RegisterForm, SignInForm, TextForm, DecryptForm, MultipleDataForm, DeleteFileForm
 from . import stega
 
@@ -42,14 +42,14 @@ def about(request):
 @login_required(login_url='/signin')
 def profile(request):
     title = 'Profile'
-    
+
     #Get user's files
     archiveFiles = stegaImage.objects.all().filter(uploader = request.user)
-    
+
     #Form for deleting archive items
     if (request.method == 'POST'):
         delete_file_form = DeleteFileForm(request.POST)
-        
+
         #Delete each item and each file by ID
         for itemID in request.POST.getlist('delete'):
             objToDelete = stegaImage.objects.get(id=itemID)
@@ -66,21 +66,21 @@ def profile(request):
             except:
                 pass
             objToDelete.delete()
-    
+
     else:
         delete_file_form = DeleteFileForm()
-        
+
     context = {
         'title': title,
         'archive': archiveFiles,
         'delete_file_form': delete_file_form,
         }
-    
+
     return render(request, 'main/profile.html', context)
 
 # Deborah Venuti added this
 # Gene Ryasnianskiy image upload and processing
-# Alex Sumner modified to accept multiple images and tar them 
+# Alex Sumner modified to accept multiple images and tar them
 # Gene Ryasnaksiy moved documents display to archive in profile view
 @login_required(login_url='/signin')
 def encrypt(request):
@@ -113,10 +113,10 @@ def encrypt(request):
                 tFile.add(("./static" + newfile.file.url), arcname=each.name)
                 os.remove(os.path.join(MEDIA_ROOT, newfile.file.name))
                 newfile.delete()
-            
+
             #close the tar file
             tFile.close()
-            
+
             #open file opject to grab the tar file
             data = open('Data.tar', mode = 'r+b')
             datas = File(data)
@@ -134,16 +134,13 @@ def encrypt(request):
                 datas.close()
                 data.close()
                 os.remove(data.name)
+                
                 #return to the page
-                return HttpResponseRedirect(reverse('encrypt'))
+                return HttpResponseRedirect(reverse('profile'))
 
             except stega.ByteOperationError as e:
                 file_invalid = True
 
-
-            
-
-            
 
         #form for text insertion
         if text_form.is_valid():
@@ -160,14 +157,12 @@ def encrypt(request):
                 new = stegaImage(uploader=request.user, processType='Encrypt Text')
                 new.FinalImage.save(carrier.name, output)
                 new.BaseImage.save(carrier.name, carrier)
+                
                 #return to the page
-                return HttpResponseRedirect(reverse('encrypt'))
+                return HttpResponseRedirect(reverse('profile'))
+            
             except stega.ByteOperationError as e:
                 text_invalid = True
-
-            
-
-            
 
     else:
         #set defaults for when no data has been submitted
@@ -199,15 +194,33 @@ def decrypt(request):
     if (request.method == 'POST'):
 
         decrypt_form = DecryptForm(request.POST, request.FILES)
-        
 
-
-        #form for extracting text
         if decrypt_form.is_valid():
+            #form for extracting text
             if decrypt_form.cleaned_data['choice'] == decrypt_form.TEXT :
+                #initialize data and grab the encrypted message
                 carrier = decrypt_form.cleaned_data['carrier']
                 message = stega.extract_text(carrier)
-            elif decrypt_form.cleaned_data['choice'] == decrypt_form.FILE :  
+                
+                #create a text file to save the message
+                textfile = open("Decrypted_Text.txt", "w")
+                textfile.write(message)
+                textfile.close()
+                data = open("Decrypted_Text.txt", mode = 'r+b')
+                datas = File(data)
+                
+                #create a database entry for the decrypted text
+                new = stegaImage(uploader=request.user, processType='Decrypt Text')
+                new.BaseImage.save(carrier.name, carrier)
+                new.TarFile.save(datas.name, datas.file)
+
+                #close and remove the temp txt file
+                datas.close()
+                data.close()
+                os.remove(data.name)
+
+            #form for extracting files
+            elif decrypt_form.cleaned_data['choice'] == decrypt_form.FILE :
                 output = ContentFile(bytes(0))
                 carrier = decrypt_form.cleaned_data['carrier']
 
@@ -218,13 +231,12 @@ def decrypt(request):
                 new = stegaImage(uploader=request.user, processType='Decrypt File')
                 new.BaseImage.save(carrier.name, carrier)
                 new.TarFile.save('Data.tar', output)
-                
-                return HttpResponseRedirect(reverse('decrypt'))
-            
+
+                return HttpResponseRedirect(reverse('profile'))
+
 
     else:
         decrypt_form = DecryptForm()
-        
 
 
     context = {

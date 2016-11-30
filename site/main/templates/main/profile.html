@@ -2,8 +2,8 @@
  This file was created on October 15th, 2016
  by Deborah Venuti and Bethany Sanders
 
- Last updated on: November 29, 2016
- Updated by: Deborah Venuti
+ Last updated on: November 30, 2016
+ Updated by: Alexander Sumner
 -->
 {% extends 'main/base.html' %}
 {% load static %}
@@ -22,9 +22,9 @@
 					 <p>
 					 	<div id="id1"  style="display:none">
 							<h4>Account Email:	{{user.email}}</h4>
-              <h4><a href= "/resetpassword" style="color: black">Reset Password</a></h4>
+              <div class = "other-link"><a href= "/resetpassword" >Reset Password</a></div>
 						</div>
-					 	<div id="id2"  style="display:none">
+					 	<div id="id2"  style="display:block">
                             {% if archive %}
 
                             <form enctype="multipart/form-data" method="post">
@@ -44,7 +44,7 @@
                                         <tr>
                                           <td>{{ files.Created_on }} UTC</td>
                                           <td>{{ files.processType }}</td>
-                                          {% if files.processType == 'Decrypt File'%}
+                                          {% if files.processType == 'Decrypt File' or files.processType == 'Decrypt Text' %}
                                             <td> <span class="other-link">
                                               <a href="{{ files.TarFile.url }}">{{ files.TarFile }}</a>
                                             </span> </td>
