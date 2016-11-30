@@ -219,7 +219,7 @@ def decrypt(request):
                 new.BaseImage.save(carrier.name, carrier)
                 new.TarFile.save('Data.tar', output)
 
-                return HttpResponseRedirect(reverse('decrypt'))
+                return HttpResponseRedirect(reverse('profile'))
 
 
     else:
