@@ -1,4 +1,4 @@
-<!--
+ <!--
  This file was created on November 3rd, 2016
  by Alexander Sumner
 
@@ -9,48 +9,33 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-	<div class="row">
-		<div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
-    	 <div class="well profile">
-				 <div class="text-center">
-					 <h2>Decrypt Here</h2>
-           <button class="btn btn-primary profile-buttons" onclick="show('id1');"> Decrypt File</button>
-					 <button class="btn btn-primary profile-buttons" onclick="show('id2');"> Decrypt Text</button>
-					 <p>
-					 	<div id="id1"  style="display:none">
-              <form enctype="multipart/form-data" method="post">
-                  {%  csrf_token %}
-                  {{ image_decrypt_form.as_p }}
-                  <input type="submit" value="Submit"/>
-              </form>
-						</div>
-					 	<div id="id2"  style="display:none">
-              <form enctype="multipart/form-data" method="post">
-                  {%  csrf_token %}
-                  {{ text_decrypt_form.as_p }}
-                  <input type="submit" value="Submit"/>
-              </form>  
-              <p>{{ text_decrypt_form.message }}</p> 
+<header id="top" class="header">
+    <div class="inner cover">
+        <div class="col-md-3 col-centered"></div>
+            <div class="col-md-12 col-centered well">
+                <div class="text-center">
+                     <h2>Decrypt Here</h2>
+                </div>
+                <p>
+                    <form enctype="multipart/form-data" method="post">
+                        <div class="form-container">
+                            {%  csrf_token %}
+                            {{ decrypt_form.as_p }}
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Submit"/>
+                        </div>
+                        <p>{{ message }}</p>
+                    </form>
+                </p>
             </div>
-					 </p>
-				 </div>
-    	 </div>
-		</div>
-	</div>
-</div>
+        </div>
+    </div>
+</header>
 {% endblock %}
 <!-- end body content block -->
 
 <!-- begin script  block -->
     {% block javascript %}
-    <script type="text/javascript">
-    function show(elementId) {
-     document.getElementById("id1").style.display="none";
-     document.getElementById("id2").style.display="none";
-     document.getElementById(elementId).style.display="block";
-    }
-    </script>
     {% endblock %}
 <!-- end script block -->
-

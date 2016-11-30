@@ -1,28 +1,32 @@
 <!--
- This file was created on October 15th, 2016
- by Deborah Venuti and Bethany Sanders
+ This file was created on November 28th, 2016
+ by James Riley
 
- Last updated on: October 15th, 2016
- Updated by: Deborah Venuti
+ Last updated on: November 29, 2016
+ Updated by: James Riley
 -->
+
 {% extends 'main/base.html' %}
 {% load static %}
 
-<!-- begin body content block -->
 {% block content %}
-    <div class="container">
-        <div class="row row-centered">    
-            <div class="col-md-3 col-centered"></div>
-            <div class="col-md-6 col-centered" align="center">
-                <h3>About Stegasaurus</h3>
-            </div>
-            <div class="col-md-3 col-centered"></div>
-        </div>
-    </div>
-{% endblock %}
+<header id="top" class="header">
+ 	<div class="inner cover">
+    	<div class="col-md-12 col-centered well">
+        	<div class="text-center">
+        		<h3>About Stegasaurus</h3>
+        	</div>
+        	<p>Stegasaurus is a web-based image steganography tool. Here users can encrypt images and text into a larger image file as well as decrypt images which have already had images or text encrypted into them.</p> 
+        	<p>Stegasaurus users can upload an image which they wish to have a smaller image or string of text encrypted into. The uploaded images and strings of text are processed into arrays of bytes. The bits comprising the bytes of the smaller image or text are then used to sequentially replace the least significant bits of the larger image's bytes. Because only the least significant bits are modified in the larger picture, the result is that the larger picture looks unchanged when the process is completed.</p>
+        	<p>If a Stegasaurus user wishes to decrypt an image previously encrypted with Stegasaurus, they can upload their image at the Decrypt page and choose whether they are decrypting an image or text. The image is processed into an array of bytes. The least significant bits or each byte are sequentially copied into the bytes of another array which is then processed into an image or string of text depending on the user's selection at the Decrypt page.</p>
+    	</div>
+	</div>
+</header>
+
+{% endblock content %}
 <!-- end body content block -->
 
+
 <!-- begin script  block -->
-    {% block javascript %}
-    {% endblock %}
+
 <!-- end script block -->

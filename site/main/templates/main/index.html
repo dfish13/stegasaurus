@@ -1,46 +1,129 @@
 <!--
- This file was created on October 15th, 2016
- by Deborah Venuti and Bethany Sanders.
+ This file was created on November 20, 2016
+ by Deborah Venuti
 
- Last updated on: October 15th, 2016
+ Last updated on: November 20, 2016
  Updated by: Deborah Venuti
 -->
-{% extends 'main/base.html' %}
+
+<!DOCTYPE html>
 {% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <link rel="icon" href="#">
 
-<!-- begin body content block -->
-{% block content %}
-    {% if user.is_authenticated %}
-        <div class="container">
-            <div class="row row-centered">    
-                <div class="col-md-3 col-centered"></div>
-                <div class="col-md-6 col-centered" align="center">
-                    <img src="{% static 'main/images/stegsmall.png' %}">    
-                    <h3>
-                        Hello, {{ user.first_name }}. <br> Welcome to Stegasaurus!
-                    </h3>
+        {% if title %}
+        <title> Stegasaurus | {{ title }} </title>
+        {% else %}
+        <title> Stegasaurus </title>
+        {% endif %}
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'main/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'main/css/custom.css' %}" rel="stylesheet">
+        <link href="{% static 'main/css/cover.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                        <h3 class="masthead-brand"><a href="/">Stegasaurus</a></h3>
+                            {% if user.is_authenticated %}
+                            <nav>
+                                <ul class="nav masthead-nav">
+                                    <li {% if request.path == "/profile" %}class="active"{% endif %}><a href="profile">Profile</a></li>
+                                    <li {% if request.path == "/encrypt" %}class="active"{% endif %}><a href="/encrypt">Encrypt</a></li>
+                                    <li {% if request.path == "/decrypt" %}class="active"{% endif %}><a href="/decrypt">Decrypt</a></li>
+                                    <li {% if request.path == "/about" %}class="active"{% endif %}><a href="/about">About</a></li>
+                                    <li><a href="signout">Sign Out</a></li>
+                                </ul>
+                            </nav>
+                            {% else %}
+                            <nav>
+                                <ul class="nav masthead-nav">
+                                    <li {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
+                                    <li {% if request.path == "/about" %}class="active"{% endif %}><a href="/about">About</a></li>
+                                    <li {% if request.path == "/signin" %}class="active"{% endif %}><a href="/signin">Sign In</a></li>
+                                    <li {% if request.path == "/register" %}class="active"{% endif %}><a href="/register">Register</a></li>
+                                </ul>
+                            </nav>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <header id="top" class="header">
+                        <div class="inner cover">
+                            <h1 class="cover-heading">Carrier Steganography Made Easy.</h1>
+                            <p class="lead">Stegasaurus lets you encrypt the data you want in the images you want. Simply upload an image, upload the data, and let Stegasaurus handle the rest.</p>
+                            <p class="lead">
+                              <a href="/about" class="btn btn-lg btn-default">Learn more</a>
+                            </p>
+                        </div>
+                    </header>
                 </div>
-                <div class="col-md-3 col-centered"></div>
             </div>
         </div>
-    {% else %}
-        <div class="container">
-            <div class="row row-centered">    
-                <div class="col-md-3 col-centered"></div>
-                <div class="col-md-6 col-centered" align="center">
-                    <img src="{% static 'main/images/stegsmall.png' %}">    
-                    <h3>
-                        Please sign in to use Stegasaurus.
-                    </h3>
-                </div>
-                <div class="col-md-3 col-centered"></div>
-            </div>
-        </div>
-    {% endif %}
-{% endblock %}
-<!-- end body content block -->
 
-<!-- begin script  block -->
-    {% block javascript %}
-    {% endblock %}
-<!-- end script block -->
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+        <script src="{% static 'main/js/jquery.js' %}"></script>
+        <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script>
+        // Scrolls to the selected menu item on the page
+        $(function() {
+            $('a[href*=#]:not([href=#],[data-toggle],[data-target],[data-slide])').click(function() {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                        $('html,body').animate({
+                            scrollTop: target.offset().top
+                        }, 1000);
+                        return false;
+                    }
+                }
+            });
+        });
+        //#to-top button appears after scrolling
+        var fixed = false;
+        $(document).scroll(function() {
+            if ($(this).scrollTop() > 250) {
+                if (!fixed) {
+                    fixed = true;
+                    // $('#to-top').css({position:'fixed', display:'block'});
+                    $('#to-top').show("slow", function() {
+                        $('#to-top').css({
+                            position: 'fixed',
+                            display: 'block'
+                        });
+                    });
+                }
+            } else {
+                if (fixed) {
+                    fixed = false;
+                    $('#to-top').hide("slow", function() {
+                        $('#to-top').css({
+                            display: 'none'
+                        });
+                    });
+                }
+            }
+        });
+        </script>
+    </body>
+</html>

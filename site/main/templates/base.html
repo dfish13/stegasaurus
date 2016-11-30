@@ -1,0 +1,76 @@
+<!--
+ This file was created on November 20, 2016
+ by Deborah Venuti
+
+ Last updated on: November 20, 2016
+ Updated by: Deborah Venuti
+-->
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <link rel="icon" href="#">
+
+        {% if title %}
+        <title> Stegasaurus | {{ title }} </title>
+        {% else %}
+        <title> Stegasaurus </title>
+        {% endif %}
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'main/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'main/css/custom.css' %}" rel="stylesheet">
+        <link href="{% static 'main/css/base.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="site-wrapper">
+            <div class="cover-container">
+                <div class="inner">
+                    <h3 class="masthead-brand"><a href="/">Stegasaurus</a></h3>
+                    {% if user.is_authenticated %}
+                    <nav>
+                        <ul class="nav masthead-nav">
+                            <li {% if request.path == "/profile" %}class="active"{% endif %}><a href="/profile">Profile</a></li>
+                            <li {% if request.path == "/encrypt" %}class="active"{% endif %}><a href="/encrypt">Encrypt</a></li>
+                            <li {% if request.path == "/decrypt" %}class="active"{% endif %}><a href="/decrypt">Decrypt</a></li>
+                            <li><a href="/signout">Sign Out</a></li>
+                        </ul>
+                    </nav>
+                    {% else %}
+                    <nav>
+                        <ul class="nav masthead-nav">
+                            <li {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
+                            <li {% if request.path == "/signin" %}class="active"{% endif %}><a href="/signin">Sign In</a></li>
+                            <li {% if request.path == "/register" %}class="active"{% endif %}><a href="/register">Register</a></li>
+                        </ul>
+                    </nav>
+                    {% endif %}
+                    <div class="container">
+                        <!-- begin body content block -->
+                            {% block content %}
+                            {% endblock %}
+                        <!-- end body content block -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- begin script  block -->
+            {% block javascript %}
+            {% endblock %}
+        <!-- end script block -->
+
+    </body>
+</html>

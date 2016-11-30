@@ -5,8 +5,8 @@
  Contributors: Deborah Venuti, Gene Ryasnianskiy, Alexander Sumner
 
 
- Last updated on: November 12, 2016
- Updated by: Alexander Sumner
+ Last updated on: November 20, 2016
+ Updated by: Gene Ryasnianskiy
 """
 
 from django import forms
@@ -23,22 +23,28 @@ class SignInForm(forms.Form):
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
 # Added: Gene Ryasnianskiy October 31, 2016
-class ImageForm(forms.Form):
-    carrier = forms.ImageField(label='Carrier file')
-    data_file = forms.FileField(label='Data file')
-
 class TextForm(forms.Form):
     carrier = forms.ImageField()
     text = forms.CharField(widget=forms.Textarea)
 
-class TextDecryptForm(forms.Form):
+class DecryptForm(forms.Form):
+    TEXT = 'T'
+    FILE = 'F'
     carrier = forms.ImageField(label='Encrypted Image')
-    message = ''
-
-# Added: Alexander Sumner November 3, 2016
-class ImageDecryptForm(forms.Form):
-    carrier = forms.ImageField(label='Encrypted Image')
+    choice = forms.ChoiceField(
+        choices = (
+            (TEXT, 'Decrypt Text'),
+            (FILE, 'Decrypt File')
+            )
+        )
 
 class MultipleDataForm(forms.Form):
     carrier = forms.ImageField(label='Carrier File')
     Files = MultiFileField(label='Data Files')
+
+#Added: Gene Ryasnianskiy November 20, 2016
+class DeleteFileForm(forms.Form):
+    delete = forms.MultipleChoiceField(
+        #choices = LIST_OF_VALID_CHOICES,
+        widget  = forms.CheckboxSelectMultiple,
+    )

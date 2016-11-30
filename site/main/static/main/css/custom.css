@@ -1,3 +1,23 @@
+/* Customize container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+.container{
+    margin-top: 15%;
+}
+
+.col-md-12 {
+    /* width: 100%; */
+    max-width: 730px;
+    margin-left: -20px;
+}
+
 .error-msg {
     color: #e6033c;
 }
@@ -9,7 +29,6 @@
 .btn-link {
     padding: 0px;
 }
-
 
 /* Remove rounded navbar border */
 @media (min-width: 768px) {
@@ -33,6 +52,10 @@
 
 .dropdown-menu li:hover .sub-menu {
     visibility: visible;
+}
+
+.dropdown-menu > li > a:hover {
+    background-color: #f3f3f2;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -62,5 +85,17 @@
 }
 
 .profile-buttons {
-    background-color: #325d88;
+    background-color: #3e3f3a;
+}
+
+.profile-buttons:hover {
+    background-color: #666666;
+}
+
+.profile-buttons:select {
+    background-color: #666666;
+}
+
+ul{
+    list-style: none;
 }
