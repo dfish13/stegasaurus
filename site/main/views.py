@@ -163,7 +163,7 @@ def encrypt(request):
                 #return to the page
                 return HttpResponseRedirect(reverse('encrypt'))
             except stega.ByteOperationError as e:
-                invalid = True
+                text_invalid = True
 
             
 
