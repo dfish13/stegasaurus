@@ -5,8 +5,8 @@
  Contributors: Deborah Venuti, Bethany Sanders,
   James Riley, Gene Ryasnianskiy, Alexander Sumner
 
-Last updated on: November 29, 2016
-Updated by: Deborah Venuti
+Last updated on: November 30, 2016
+Updated by: Alexander Sumner
 """
 
 #Python Imports
@@ -26,7 +26,7 @@ from django.views.generic.edit import FormView
 from stegasaurus.settings import MEDIA_ROOT
 
 #App Imports
-from .models import stegaImage, stegaExtractedFile, tempFile
+from .models import stegaImage, tempFile
 from .forms import RegisterForm, SignInForm, TextForm, DecryptForm, MultipleDataForm, DeleteFileForm
 from . import stega
 
@@ -134,15 +134,12 @@ def encrypt(request):
                 datas.close()
                 data.close()
                 os.remove(data.name)
+                
                 #return to the page
                 return HttpResponseRedirect(reverse('profile'))
 
             except stega.ByteOperationError as e:
                 file_invalid = True
-
-
-
-
 
 
         #form for text insertion
@@ -160,14 +157,12 @@ def encrypt(request):
                 new = stegaImage(uploader=request.user, processType='Encrypt Text')
                 new.FinalImage.save(carrier.name, output)
                 new.BaseImage.save(carrier.name, carrier)
+                
                 #return to the page
                 return HttpResponseRedirect(reverse('profile'))
+            
             except stega.ByteOperationError as e:
                 text_invalid = True
-
-
-
-
 
     else:
         #set defaults for when no data has been submitted
@@ -200,30 +195,31 @@ def decrypt(request):
 
         decrypt_form = DecryptForm(request.POST, request.FILES)
 
-
-
-        #form for extracting text
         if decrypt_form.is_valid():
+            #form for extracting text
             if decrypt_form.cleaned_data['choice'] == decrypt_form.TEXT :
+                #initialize data and grab the encrypted message
                 carrier = decrypt_form.cleaned_data['carrier']
                 message = stega.extract_text(carrier)
                 
+                #create a text file to save the message
                 textfile = open("Decrypted_Text.txt", "w")
                 textfile.write(message)
                 textfile.close()
                 data = open("Decrypted_Text.txt", mode = 'r+b')
                 datas = File(data)
                 
+                #create a database entry for the decrypted text
                 new = stegaImage(uploader=request.user, processType='Decrypt Text')
                 new.BaseImage.save(carrier.name, carrier)
                 new.TarFile.save(datas.name, datas.file)
 
+                #close and remove the temp txt file
                 datas.close()
                 data.close()
                 os.remove(data.name)
 
-                
-            
+            #form for extracting files
             elif decrypt_form.cleaned_data['choice'] == decrypt_form.FILE :
                 output = ContentFile(bytes(0))
                 carrier = decrypt_form.cleaned_data['carrier']
@@ -241,7 +237,6 @@ def decrypt(request):
 
     else:
         decrypt_form = DecryptForm()
-
 
 
     context = {
