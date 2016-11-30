@@ -16,10 +16,8 @@
         <div class="col-md-3 col-centered"></div>
             <div class="col-md-12 col-centered well">
               <div class="text-center">
-                 <h3>Encrypt Here</h3>
-                 <h5>Carrier File - Image which will hold encrypted images or text</h5>
-                 <h5>Data Files - Images which will be encrypted into the carrier file</h5>
-                 <h5>Text - a string of characters to be encrypted into the carrier file</h5>
+                 <h3>Encrypt</h3>
+                 <p>Upload a carrier image and either upload data files or enter text for encryption. If you aren't sure what each form expects, hover over the form label to see more information.</p>
                  <button class="btn btn-primary" onclick="show('id1');"> Encrypt File</button>
                  <button class="btn btn-primary" onclick="show('id2');"> Encrypt Text</button>
               </div>
@@ -34,11 +32,11 @@
                         <div class="form-container">
                           {%  csrf_token %}
                           <p>
-                            <label data-toggle="tooltip" title="Large image you wish to have data files or text encrypted into" for="id_carrier">Carrier File:</label>
+                            <label data-toggle="tooltip" title="Large image you wish to have data files encrypted into" for="id_carrier">Carrier File:</label>
                             <input id="id_carrier" name="carrier" required=" " type="file">
                           </p>
                           <p>
-                            <label data-toggle="tooltip" title="Smaller images you wish to have encrypted into the carrier file" for="id_Files">Data Files:</label>
+                            <label data-toggle="tooltip" title="File(s) you wish to have encrypted into the carrier image" for="id_Files">Data Files:</label>
                             <input id="id_Files" multiple="multiple" name="Files" required=" " type="file">
                           </p>
                         </div>
@@ -57,11 +55,11 @@
                       <div class="form-container">
                         {%  csrf_token %}
                         <p>
-                          <label data-toggle="tooltip" title="Large image you wish to have data files or text encrypted into" for="id_carrier">Carrier File:</label>
+                          <label data-toggle="tooltip" title="Large image you wish to have data files encrypted into" for="id_carrier">Carrier File:</label>
                           <input id="id_carrier" name="carrier" type="file" required>
                         </p>
                         <p>
-                          <label data-toggle="tolltip" title="String of characters you wish to encrypt into the carrier image"for="id_text">Text:</label><br>
+                          <label data-toggle="tolltip" title="Text you wish to encrypt into the carrier image"for="id_text">Text:</label><br>
                           <textarea cols="30" id="id_text" name="text" rows="5" required></textarea>
                         </p>
                       </div>
