@@ -23,11 +23,11 @@
 					 <h2>{{ user.first_name }} {{user.last_name}}</h2>
 					 <button class="btn btn-primary" onclick="show('id1');"> Details </button>
 					 <button id="archive" class="btn btn-primary" onclick="show('id2');"> Archive </button>
-					 <button id="settings" class="btn btn-primary" onclick="show('id3');"> Settings </button>
 
 					 <p>
 					 	<div id="id1"  style="display:none">
 							<h4>Account Email:	{{user.email}}</h4>
+              <h4><a href= "/resetpassword" style="color: black">Reset Password</a></h4>
 						</div>
 					 	<div id="id2"  style="display:none">
                             {% if archive %}
@@ -77,9 +77,6 @@
                             {% endif %}
 
 					 	</div>
-            <div id="id3"  style="display:none">
-						  <h4><a href= "/resetpassword" style="color: black">Reset Password</a></h4>
-            </div>
 					 </p>
 				</div>
             </div>
@@ -95,7 +92,6 @@
 		function show(elementId) {
 		 document.getElementById("id1").style.display="none";
 		 document.getElementById("id2").style.display="none";
-     document.getElementById("id3").style.display="none";
 		 document.getElementById(elementId).style.display="block";
 		}
 		</script>
