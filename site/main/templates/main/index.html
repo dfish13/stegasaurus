@@ -43,6 +43,7 @@
                                     <li {% if request.path == "/profile" %}class="active"{% endif %}><a href="profile">Profile</a></li>
                                     <li {% if request.path == "/encrypt" %}class="active"{% endif %}><a href="/encrypt">Encrypt</a></li>
                                     <li {% if request.path == "/decrypt" %}class="active"{% endif %}><a href="/decrypt">Decrypt</a></li>
+                                    <li {% if request.path == "/about" %}class="active"{% endif %}><a href="/about">About</a></li>
                                     <li><a href="signout">Sign Out</a></li>
                                 </ul>
                             </nav>
@@ -50,6 +51,7 @@
                             <nav>
                                 <ul class="nav masthead-nav">
                                     <li {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
+                                    <li {% if request.path == "/about" %}class="active"{% endif %}><a href="/about">About</a></li>
                                     <li {% if request.path == "/signin" %}class="active"{% endif %}><a href="/signin">Sign In</a></li>
                                     <li {% if request.path == "/register" %}class="active"{% endif %}><a href="/register">Register</a></li>
                                 </ul>
@@ -63,7 +65,7 @@
                             <h1 class="cover-heading">Carrier Steganography Made Easy.</h1>
                             <p class="lead">Stegasaurus lets you encrypt the data you want in the images you want. Simply upload an image, upload the data, and let Stegasaurus handle the rest.</p>
                             <p class="lead">
-                              <a href="#" class="btn btn-lg btn-default">Learn more</a>
+                              <a href="/about" class="btn btn-lg btn-default">Learn more</a>
                             </p>
                         </div>
                     </header>
