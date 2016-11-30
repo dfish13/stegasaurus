@@ -25,7 +25,9 @@
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Submit"/>
                         </div>
-                        <p>{{ message }}</p>
+                        {% if message != '' %}
+                          <p>The encrypted text is: {{ message }}</p>
+                        {% endif %}
                     </form>
                 </p>
             </div>

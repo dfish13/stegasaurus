@@ -207,6 +207,23 @@ def decrypt(request):
             if decrypt_form.cleaned_data['choice'] == decrypt_form.TEXT :
                 carrier = decrypt_form.cleaned_data['carrier']
                 message = stega.extract_text(carrier)
+                
+                textfile = open("Decrypted_Text.txt", "w")
+                textfile.write(message)
+                textfile.close()
+                data = open("Decrypted_Text.txt", mode = 'r+b')
+                datas = File(data)
+                
+                new = stegaImage(uploader=request.user, processType='Decrypt Text')
+                new.BaseImage.save(carrier.name, carrier)
+                new.TarFile.save(datas.name, datas.file)
+
+                datas.close()
+                data.close()
+                os.remove(data.name)
+
+                
+            
             elif decrypt_form.cleaned_data['choice'] == decrypt_form.FILE :
                 output = ContentFile(bytes(0))
                 carrier = decrypt_form.cleaned_data['carrier']
@@ -219,7 +236,7 @@ def decrypt(request):
                 new.BaseImage.save(carrier.name, carrier)
                 new.TarFile.save('Data.tar', output)
 
-                return HttpResponseRedirect(reverse('decrypt'))
+                return HttpResponseRedirect(reverse('profile'))
 
 
     else:
