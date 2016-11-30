@@ -27,7 +27,7 @@ from stegasaurus.settings import MEDIA_ROOT
 
 #App Imports
 from .models import stegaImage, stegaExtractedFile, tempFile
-from .forms import RegisterForm, SignInForm, TextForm, TextDecryptForm, ImageDecryptForm, MultipleDataForm, DeleteFileForm
+from .forms import RegisterForm, SignInForm, TextForm, DecryptForm, MultipleDataForm, DeleteFileForm
 from . import stega
 
 def index(request):
@@ -87,7 +87,7 @@ def encrypt(request):
     title = 'Encrypt'
 
     userObject = User.objects.get(username = request.user.username)
-    #print(userObject
+
     # Handle file upload
     if request.method == 'POST':
 
@@ -102,7 +102,7 @@ def encrypt(request):
             #grab the information from the submitted form
             output = ContentFile(bytes(0))
             carrier = multiple_data_form.cleaned_data['carrier']
-            tFile = tarfile.open("Data.tar", 'w')
+            tFile = tarfile.open("Data.tar", 'w:gz')
 
             #temporarily store the files to facilitate taring them later
             for each in multiple_data_form.cleaned_data['Files']:
@@ -178,43 +178,43 @@ def decrypt(request):
 
     #gather user information
     userObject = User.objects.get(username = request.user.username)
+    message = ''
 
     if (request.method == 'POST'):
 
-        #create form objects
-        text_decrypt_form = TextDecryptForm(request.POST, request.FILES)
-        image_decrypt_form = ImageDecryptForm(request.POST, request.FILES)
+        decrypt_form = DecryptForm(request.POST, request.FILES)
+        
+
 
         #form for extracting text
-        if text_decrypt_form.is_valid():
-            carrier = text_decrypt_form.cleaned_data['carrier']
-            text_decrypt_form.message = stega.extract_text(carrier)
+        if decrypt_form.is_valid():
+            if decrypt_form.cleaned_data['choice'] == decrypt_form.TEXT :
+                carrier = decrypt_form.cleaned_data['carrier']
+                message = stega.extract_text(carrier)
+            elif decrypt_form.cleaned_data['choice'] == decrypt_form.FILE :  
+                output = ContentFile(bytes(0))
+                carrier = decrypt_form.cleaned_data['carrier']
 
+                #extracting is currently in development
+                stega.extract_file(carrier, output)
 
-        #form for extracting images/other files
-        if image_decrypt_form.is_valid():
-            output = ContentFile(bytes(0))
-            carrier = image_decrypt_form.cleaned_data['carrier']
-
-            #extracting is currently in development
-            stega.extract_file(carrier, output)
-
-            #save the extracted file to the users database
-            new = stegaImage(uploader=request.user, processType='Decrypt File')
-            new.BaseImage.save(carrier.name, carrier)
-            new.TarFile.save('Data.tar', output)
+                #save the extracted file to the users database
+                new = stegaImage(uploader=request.user, processType='Decrypt File')
+                new.BaseImage.save(carrier.name, carrier)
+                new.TarFile.save('Data.tar', output)
+                
+                return HttpResponseRedirect(reverse('decrypt'))
             
-            return HttpResponseRedirect(reverse('decrypt'))
 
     else:
-        text_decrypt_form = TextDecryptForm()
-        image_decrypt_form = ImageDecryptForm()
+        decrypt_form = DecryptForm()
+        
 
 
     context = {
-        'image_decrypt_form': image_decrypt_form,
-        'text_decrypt_form': text_decrypt_form,
+        'decrypt_form': decrypt_form,
         'title': title,
+        'message': message,
         }
 
     return render(request, 'main/decrypt.html', context)
