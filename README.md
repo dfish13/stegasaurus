@@ -18,17 +18,6 @@ Another limitation to the lsb substitution method is that if an image has low en
 its modified version might be significantly larger.
 This has to do with the compression methods used by PNG images.
 
-### How to Run
-
-The module stega.py is executable and allows you to test its basic functions.
-To run stega.py type
-```sh
-$ python3 stega.py
-```
-and hit enter.
-
-You will be presented with a few options and prompted to choose one of the test functions.
-
 ### How to Run Test Suite
 
 The module tests.py is executable and is run through the module manage.py.
@@ -41,6 +30,3 @@ and hit enter.
 
 You will be presented with an OK message if all tests executed correctly.
 
-***
-
-To access the site: http://resnus.duckdns.org
