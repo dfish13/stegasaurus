@@ -1,20 +1,10 @@
 # Stegasaurus #
 
-### About
+### Setting Up and Running in a Local Environment
+To run the Stegasaurus web app, please refer to our detailed wiki page for information on how to set up and build Stegasaurus locally.
 
+[Setup, Build and Run Wiki](https://github.com/dfish13/stegasaurus/wiki/Setting-Up-and-Running-in-a-Local-Environment#windows)
 
-
-### Supports
-
-Currently, the python module stega.py has functions that support unicode
-text injection and extraction to and from PNG image files.
-Additionally, this module supports injection and extraction of certain
-types of PNG images to and from larger PNG files.
-PNG image types that are supported are:
-
-* Grayscale
-* RGB (3 channel)
-* RGBA (4 channel)
 
 ### Limitations
 
