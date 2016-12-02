@@ -42,14 +42,14 @@
                                   <tbody>
                                     {% for files in archive %}
                                         <tr>
-                                          <td>{{ files.Created_on }} UTC</td>
-                                          <td>{{ files.processType }}</td>
+                                          <td align="left">{{ files.Created_on }} UTC</td>
+                                          <td align="left">{{ files.processType }}</td>
                                           {% if files.processType == 'Decrypt File' or files.processType == 'Decrypt Text' %}
-                                            <td> <span class="other-link">
+                                            <td align="left"> <span class="other-link">
                                               <a href="{{ files.TarFile.url }}">{{ files.TarFile }}</a>
                                             </span> </td>
                                           {% else %}
-                                            <td> <span class="other-link">
+                                            <td align="left"> <span class="other-link">
                                                 <a href="{{ files.FinalImage.url }}">{{ files.FinalImage }}</a>
                                             </span> </td>
                                           {% endif %}
